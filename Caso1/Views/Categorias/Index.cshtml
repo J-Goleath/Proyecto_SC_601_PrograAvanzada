@@ -1,0 +1,100 @@
+﻿@using Caso1.Entities;
+@model IEnumerable<Categoria>
+
+@{
+    ViewBag.Title = "Categorías Registradas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div id="mensajeExito" class="alert alert-success fade show">
+            @TempData["MensajeExito"]
+        </div>
+    }
+
+    @if (TempData["MensajeError"] != null)
+    {
+        <div id="mensajeError" class="alert alert-danger fade show">
+            @TempData["MensajeError"]
+        </div>
+    }
+
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            Categorías Registradas
+        </div>
+        <div class="card-body">
+            @Html.ActionLink(
+                "Registrar nueva Categoría",
+                "Create",
+                null,
+                new { @class = "btn btn-primary mb-3" })
+
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Fecha de Creación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var categoria in Model.Where(c => !c.Borrado))
+                    {
+                        <tr>
+                            <td>@categoria.Id</td>
+                            <td>@categoria.Nombre</td>
+                            <td>@categoria.Descripcion</td>
+                            <td>@categoria.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                @Html.ActionLink(
+                                    "Detalles",
+                                    "Details",
+                                    new { id = categoria.Id },
+                                    new { @class = "btn btn-info btn-sm" })
+
+                                @Html.ActionLink(
+                                    "Editar",
+                                    "Edit",
+                                    new { id = categoria.Id },
+                                    new { @class = "btn btn-warning btn-sm" })
+
+                                @using (Html.BeginForm("Delete", "Categorias", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("id", categoria.Id)
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('¿Está seguro de eliminar esta categoría?')">
+                                        Eliminar
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function desplegarMensaje(nombreMensaje) {
+        const mensaje = document.getElementById(nombreMensaje);
+        if (mensaje) {
+            mensaje.style.transition = "opacity 1.5s";
+
+            setTimeout(function () {
+                mensaje.style.opacity = "0";
+                mensaje.remove();
+            }, 3000);
+        }
+    }
+    desplegarMensaje("mensajeExito");
+    desplegarMensaje("mensajeError");
+</script>
