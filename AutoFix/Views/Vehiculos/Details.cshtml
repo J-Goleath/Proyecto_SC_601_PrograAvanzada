@@ -1,0 +1,46 @@
+﻿@model AutoFix.Entities.Vehiculo
+
+@{
+    ViewBag.Title = "Detalles del Vehículo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h4>Detalles del Vehículo</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">Placa</dt>
+                <dd class="col-sm-9">@Model.Placa</dd>
+
+                <dt class="col-sm-3">Marca</dt>
+                <dd class="col-sm-9">@Model.Marca</dd>
+
+                <dt class="col-sm-3">Modelo</dt>
+                <dd class="col-sm-9">@Model.Modelo</dd>
+
+                <dt class="col-sm-3">Año</dt>
+                <dd class="col-sm-9">@Model.Anio</dd>
+
+                <dt class="col-sm-3">Color</dt>
+                <dd class="col-sm-9">@Model.Color</dd>
+
+                <dt class="col-sm-3">Cliente</dt>
+                <dd class="col-sm-9">@(Model.Cliente != null ? Model.Cliente.Nombre : "Sin cliente")</dd>
+
+                <dt class="col-sm-3">Fecha de Registro</dt>
+                <dd class="col-sm-9">@Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</dd>
+            </dl>
+
+            <div class="form-group mt-3">
+                @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
+                @Html.ActionLink("Volver al listado", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        </div>
+    </div>
+</div>

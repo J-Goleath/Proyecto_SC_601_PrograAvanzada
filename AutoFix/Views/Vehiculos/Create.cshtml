@@ -1,0 +1,105 @@
+﻿@model AutoFix.Entities.Vehiculo
+
+@{
+    ViewBag.Title = "Registrar Vehículo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h4><i class="fas fa-car"></i> Registrar Nuevo Vehículo</h4>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Placa, new { @class = "font-weight-bold" })
+                            @Html.TextBoxFor(model => model.Placa, new { @class = "form-control", placeholder = "Ej: ABC-123 o 123456" })
+                            @Html.ValidationMessageFor(model => model.Placa, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ClienteId, new { @class = "font-weight-bold" })
+                            @Html.DropDownListFor(model => model.ClienteId, (SelectList)ViewBag.Clientes, "Seleccione un cliente", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ClienteId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Marca, new { @class = "font-weight-bold" })
+                            @Html.TextBoxFor(model => model.Marca, new { @class = "form-control", placeholder = "Ej: Toyota" })
+                            @Html.ValidationMessageFor(model => model.Marca, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Modelo, new { @class = "font-weight-bold" })
+                            @Html.TextBoxFor(model => model.Modelo, new { @class = "form-control", placeholder = "Ej: Corolla" })
+                            @Html.ValidationMessageFor(model => model.Modelo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Anio, new { @class = "font-weight-bold" })
+                            @Html.TextBoxFor(model => model.Anio, new { @class = "form-control", placeholder = "2020", type = "number" })
+                            @Html.ValidationMessageFor(model => model.Anio, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Color, new { @class = "font-weight-bold" })
+                            @Html.TextBoxFor(model => model.Color, new { @class = "form-control", placeholder = "Rojo" })
+                            @Html.ValidationMessageFor(model => model.Color, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FechaRegistro, new { @class = "font-weight-bold" })
+                            @Html.TextBoxFor(model => model.FechaRegistro, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            
+            var campoFecha = $("#FechaRegistro");
+            if (campoFecha.length > 0) {
+                campoFecha.rules("remove", "required");
+                campoFecha.rules("remove", "date");
+            }
+        });
+    </script>
+}

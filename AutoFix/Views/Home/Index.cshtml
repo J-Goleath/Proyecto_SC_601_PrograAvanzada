@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron mt-4">
+    <h1 class="display-4">AutoFix Manager</h1>
+    <p class="lead">Sistema de gestión para talleres mecánicos.</p>
+    <hr class="my-4">
+    <p>Administra clientes, vehículos, citas y órdenes de trabajo de forma eficiente.</p>
+    <p class="lead">
+        @if (User.Identity.IsAuthenticated)
+        {
+            var rol = Session["UsuarioRol"]?.ToString() ?? "";
+            if (rol.ToLower() == "administrador")
+            {
+                <a class="btn btn-primary btn-lg" href="@Url.Action("Create", "Clientes")" role="button">Registrar Cliente</a>
+                <a class="btn btn-success btn-lg" href="@Url.Action("Create", "Vehiculos")" role="button">Registrar Vehículo</a>
+            }
+        }
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h5><i class="fas fa-users"></i> Clientes</h5>
+            </div>
+            <div class="card-body">
+                <p>Gestión de clientes del taller.</p>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    var rol = Session["UsuarioRol"]?.ToString() ?? "";
+                    if (rol.ToLower() == "administrador")
+                    {
+                        <a href="@Url.Action("Index", "Clientes")" class="btn btn-primary">Ver Clientes</a>
+                    }
+                    else
+                    {
+                        <p class="text-muted"><i class="fas fa-lock"></i> Solo administradores</p>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted"><i class="fas fa-lock"></i> Inicie sesión para ver</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h5><i class="fas fa-car"></i> Vehículos</h5>
+            </div>
+            <div class="card-body">
+                <p>Gestión de vehículos registrados.</p>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    var rol = Session["UsuarioRol"]?.ToString() ?? "";
+                    if (rol.ToLower() == "administrador")
+                    {
+                        <a href="@Url.Action("Index", "Vehiculos")" class="btn btn-success">Ver Vehículos</a>
+                    }
+                    else
+                    {
+                        <p class="text-muted"><i class="fas fa-lock"></i> Solo administradores</p>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted"><i class="fas fa-lock"></i> Inicie sesión para ver</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h5><i class="fas fa-calendar-check"></i> Citas</h5>
+            </div>
+            <div class="card-body">
+                <p>Gestión de citas programadas.</p>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a href="@Url.Action("Index", "Citas")" class="btn btn-warning">Ver Citas</a>
+                }
+                else
+                {
+                    <p class="text-muted"><i class="fas fa-lock"></i> Inicie sesión para ver</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
