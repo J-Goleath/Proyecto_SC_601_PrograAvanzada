@@ -1,0 +1,84 @@
+﻿@model IEnumerable<AutoFix.Entities.OrdenTrabajo>
+
+@{
+    ViewBag.Title = "Órdenes de Trabajo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Órdenes de Trabajo</h4>
+        </div>
+
+        <div class="card-body">
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["Success"]
+                </div>
+            }
+
+            <p>
+                @Html.ActionLink("Registrar nueva orden", "Create", null, new { @class = "btn btn-primary" })
+            </p>
+
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Vehículo</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Fecha Creación</th>
+                        <th>Fecha Finalización</th>
+                        <th>Observaciones</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (item.Vehiculo != null)
+                                {
+                                    @item.Vehiculo.Placa
+                                }
+                            </td>
+
+                            <td>@item.DescripcionTrabajo</td>
+                            <td>@item.Estado</td>
+                            <td>@item.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</td>
+
+                            <td>
+                                @if (item.FechaFinalizacion.HasValue)
+                                {
+                                    @item.FechaFinalizacion.Value.ToString("dd/MM/yyyy HH:mm")
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Pendiente</span>
+                                }
+                            </td>
+
+                            <td>@item.Observaciones</td>
+
+                            <td>
+                                @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" })
+                                @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @class = "btn btn-info btn-sm" })
+                                @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

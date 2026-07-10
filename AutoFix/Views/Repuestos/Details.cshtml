@@ -1,0 +1,69 @@
+﻿@model AutoFix.Entities.Repuesto
+
+@{
+    ViewBag.Title = "Detalle del Repuesto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Detalle del Repuesto</h4>
+        </div>
+
+        <div class="card-body">
+
+            <dl class="row">
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Nombre)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Descripcion)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Descripcion)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.CantidadDisponible)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.CantidadDisponible)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.PrecioUnitario)
+                </dt>
+                <dd class="col-sm-9">
+                    ₡@Model.PrecioUnitario.ToString("N2")
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.FechaRegistro)
+                </dt>
+                <dd class="col-sm-9">
+                    @Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")
+                </dd>
+
+            </dl>
+
+            <hr />
+
+            <div class="d-flex justify-content-between">
+                @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-secondary" })
+
+                @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

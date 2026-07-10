@@ -1,0 +1,99 @@
+﻿@model AutoFix.Entities.OrdenTrabajo
+
+@{
+    ViewBag.Title = "Eliminar Orden de Trabajo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Eliminar Orden de Trabajo</h4>
+        </div>
+
+        <div class="card-body">
+
+            <div class="alert alert-warning">
+                ¿Está seguro que desea eliminar esta orden de trabajo?
+            </div>
+
+            <dl class="row">
+
+                <dt class="col-sm-3">Vehículo</dt>
+                <dd class="col-sm-9">
+                    @if (Model.Vehiculo != null)
+                    {
+                        <span>@Model.Vehiculo.Placa - @Model.Vehiculo.Marca @Model.Vehiculo.Modelo</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin vehículo asociado</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.DescripcionTrabajo)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.DescripcionTrabajo)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Estado)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Estado)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.FechaCreacion)
+                </dt>
+                <dd class="col-sm-9">
+                    @Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.FechaFinalizacion)
+                </dt>
+                <dd class="col-sm-9">
+                    @if (Model.FechaFinalizacion.HasValue)
+                    {
+                        @Model.FechaFinalizacion.Value.ToString("dd/MM/yyyy HH:mm")
+                    }
+                    else
+                    {
+                        <span class="text-muted">Pendiente</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Observaciones)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Observaciones)
+                </dd>
+
+            </dl>
+
+            <hr />
+
+            @using (Html.BeginForm("Delete", "OrdenesTrabajo", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="d-flex justify-content-between">
+                    @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-secondary" })
+
+                    <button type="submit" class="btn btn-danger">
+                        Eliminar
+                    </button>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

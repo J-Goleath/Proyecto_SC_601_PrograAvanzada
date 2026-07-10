@@ -131,13 +131,19 @@
     <Compile Include="Controllers\CalendarioMecanicoController.cs" />
     <Compile Include="Controllers\CitasController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
+    <Compile Include="Controllers\HistorialVehicularController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\NotificacionesController.cs" />
+    <Compile Include="Controllers\OrdenesTrabajoController.cs" />
+    <Compile Include="Controllers\RepuestosController.cs" />
     <Compile Include="Controllers\VehiculosController.cs" />
     <Compile Include="Entities\CitaSolicitud.cs" />
     <Compile Include="Entities\Cliente.cs" />
+    <Compile Include="Entities\HistorialVehicular.cs" />
     <Compile Include="Entities\Notificacion.cs" />
+    <Compile Include="Entities\OrdenTrabajo.cs" />
+    <Compile Include="Entities\Repuesto.cs" />
     <Compile Include="Entities\Vehiculo.cs" />
     <Compile Include="Filters\CustomAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -158,8 +164,11 @@
     <Compile Include="Migrations\202607091919575_InitialCreate.Designer.cs">
       <DependentUpon>202607091919575_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202607102130236_AddModulosIntegrante2.cs" />
+    <Compile Include="Migrations\202607102130236_AddModulosIntegrante2.Designer.cs">
+      <DependentUpon>202607102130236_AddModulosIntegrante2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\PasswordHelper.cs" />
   </ItemGroup>
@@ -696,6 +705,21 @@
     <Content Include="Views\Citas\Edit.cshtml" />
     <Content Include="Views\Citas\Index.cshtml" />
     <Content Include="Views\CalendarioMecanico\Index.cshtml" />
+    <Content Include="Views\Repuestos\Index.cshtml" />
+    <Content Include="Views\Repuestos\Create.cshtml" />
+    <Content Include="Views\Repuestos\Edit.cshtml" />
+    <Content Include="Views\OrdenesTrabajo\Index.cshtml" />
+    <Content Include="Views\OrdenesTrabajo\Create.cshtml" />
+    <Content Include="Views\Repuestos\Details.cshtml" />
+    <Content Include="Views\OrdenesTrabajo\Details.cshtml" />
+    <Content Include="Views\OrdenesTrabajo\Edit.cshtml" />
+    <Content Include="Views\HistorialVehicular\Index.cshtml" />
+    <Content Include="Views\HistorialVehicular\Create.cshtml" />
+    <Content Include="Views\HistorialVehicular\Details.cshtml" />
+    <Content Include="Views\HistorialVehicular\Edit.cshtml" />
+    <Content Include="Views\HistorialVehicular\Delete.cshtml" />
+    <Content Include="Views\Repuestos\Delete.cshtml" />
+    <Content Include="Views\OrdenesTrabajo\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -732,6 +756,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202607091919575_InitialCreate.resx">
       <DependentUpon>202607091919575_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202607102130236_AddModulosIntegrante2.resx">
+      <DependentUpon>202607102130236_AddModulosIntegrante2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
