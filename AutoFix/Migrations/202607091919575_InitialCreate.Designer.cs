@@ -7,13 +7,13 @@ namespace AutoFix.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.5.2")]
-    public sealed partial class AddClientesYVehiculos : IMigrationMetadata
+    public sealed partial class InitialCreate : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddClientesYVehiculos));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCreate));
         
         string IMigrationMetadata.Id
         {
-            get { return "202607070131588_AddClientesYVehiculos"; }
+            get { return "202607091919575_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

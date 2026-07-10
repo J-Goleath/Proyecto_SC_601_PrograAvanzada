@@ -1,0 +1,112 @@
+﻿@model IEnumerable<AutoFix.Entities.CitaSolicitud>
+
+@{
+    ViewBag.Title = "Mis Citas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div id="mensajeExito" class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["MensajeExito"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (TempData["MensajeError"] != null)
+    {
+        <div id="mensajeError" class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["MensajeError"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h4>Mis Citas</h4>
+        </div>
+        <div class="card-body">
+            <p>
+                @Html.ActionLink("Solicitar Nueva Cita", "Create", null, new { @class = "btn btn-primary" })
+            </p>
+
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Vehículo</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Mecánico</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td>@item.Hora.ToString(@"hh\:mm")</td>
+                            <td>@(item.Vehiculo != null ? item.Vehiculo.Placa + " - " + item.Vehiculo.Marca : "N/A")</td>
+                            <td>@item.DescripcionFallos</td>
+                            <td>
+                                @if (item.Procesada)
+                                {
+                                    <span class="badge badge-success">Procesada</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-warning">Pendiente</span>
+                                }
+                            </td>
+                            <td>@(item.Mecanico != null ? item.Mecanico.Nombre : "Sin asignar")</td>
+                            <td>
+                                @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @class = "btn btn-info btn-sm" })
+                                @if (!item.Procesada)
+                                {
+                                    @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" })
+                                    <form action="@Url.Action("Delete", "Citas")" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está segura de cancelar esta cita?')">
+                                            Cancelar
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info">
+                    No tiene citas registradas. @Html.ActionLink("Solicite una aquí.", "Create")
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function desplegarMensaje(nombreMensaje) {
+        const mensaje = document.getElementById(nombreMensaje);
+        if (mensaje) {
+            mensaje.style.transition = "opacity 1.5s";
+            setTimeout(function () {
+                mensaje.style.opacity = "0";
+                mensaje.remove();
+            }, 3000);
+        }
+    }
+    desplegarMensaje("mensajeExito");
+    desplegarMensaje("mensajeError");
+</script>

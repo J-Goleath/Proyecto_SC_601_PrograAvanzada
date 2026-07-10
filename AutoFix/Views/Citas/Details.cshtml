@@ -1,0 +1,49 @@
+﻿@model AutoFix.Entities.CitaSolicitud
+
+@{
+    ViewBag.Title = "Detalle de Cita";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h4>Detalle de Cita</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Vehículo</dt>
+                <dd class="col-sm-9">@(Model.Vehiculo != null ? Model.Vehiculo.Placa + " - " + Model.Vehiculo.Marca + " " + Model.Vehiculo.Modelo : "N/A")</dd>
+
+                <dt class="col-sm-3">Fecha</dt>
+                <dd class="col-sm-9">@Model.Fecha.ToString("dd/MM/yyyy")</dd>
+
+                <dt class="col-sm-3">Hora</dt>
+                <dd class="col-sm-9">@Model.Hora.ToString(@"hh\:mm")</dd>
+
+                <dt class="col-sm-3">Descripción del Problema</dt>
+                <dd class="col-sm-9">@Model.DescripcionFallos</dd>
+
+                <dt class="col-sm-3">Estado</dt>
+                <dd class="col-sm-9">
+                    @if (Model.Procesada)
+                    {
+                        <span class="badge badge-success">Procesada</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-warning">Pendiente</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Mecánico Asignado</dt>
+                <dd class="col-sm-9">@(Model.Mecanico != null ? Model.Mecanico.Nombre : "Sin asignar")</dd>
+
+                <dt class="col-sm-3">Fecha de Solicitud</dt>
+                <dd class="col-sm-9">@Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</dd>
+            </dl>
+
+            @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-secondary" })
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+﻿@model AutoFix.Entities.CitaSolicitud
+
+@{
+    ViewBag.Title = "Editar Cita";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h4>Editar Cita</h4>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.VehiculoId, "Vehículo", new { @class = "font-weight-bold" })
+                            @Html.DropDownListFor(model => model.VehiculoId, (IEnumerable<SelectListItem>)ViewBag.Vehiculos, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.VehiculoId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Fecha, new { @class = "font-weight-bold" })
+                            @Html.TextBoxFor(model => model.Fecha, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                            @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Hora, new { @class = "font-weight-bold" })
+                            @Html.TextBox("Hora", Model.Hora.ToString(@"hh\:mm"), new { @class = "form-control", type = "time" })
+                            @Html.ValidationMessageFor(model => model.Hora, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DescripcionFallos, new { @class = "font-weight-bold" })
+                            @Html.TextAreaFor(model => model.DescripcionFallos, new { @class = "form-control", rows = "4" })
+                            @Html.ValidationMessageFor(model => model.DescripcionFallos, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-success">
+                        Guardar Cambios
+                    </button>
+                    @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
