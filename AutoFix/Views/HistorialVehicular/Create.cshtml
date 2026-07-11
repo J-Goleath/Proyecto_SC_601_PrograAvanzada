@@ -1,0 +1,158 @@
+﻿@model AutoFix.Entities.HistorialVehicular
+
+@{
+    ViewBag.Title = "Registrar Historial Vehicular";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Registrar Historial Vehicular</h4>
+        </div>
+
+        <div class="card-body">
+
+            @using (Html.BeginForm("Create", "HistorialVehicular", FormMethod.Post, new { id = "formCrearHistorial" }))
+            {
+                @Html.AntiForgeryToken()
+
+                if (!ViewData.ModelState.IsValid)
+                {
+                    @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+                }
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.VehiculoId, new { @class = "form-label" })
+
+                    @Html.DropDownList(
+                        "VehiculoId",
+                        null,
+                        "Seleccione un vehículo",
+                        new { @class = "form-select" })
+
+                    @Html.ValidationMessageFor(model => model.VehiculoId, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.OrdenTrabajoId, new { @class = "form-label" })
+
+                    @Html.DropDownList(
+                        "OrdenTrabajoId",
+                        null,
+                        "Seleccione una orden de trabajo",
+                        new { @class = "form-select" })
+
+                    @Html.ValidationMessageFor(model => model.OrdenTrabajoId, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.DescripcionServicio, new { @class = "form-label" })
+
+                    @Html.TextAreaFor(
+                        model => model.DescripcionServicio,
+                        new
+                        {
+                            @class = "form-control",
+                            rows = "4",
+                            placeholder = "Digite la descripción del servicio realizado"
+                        })
+
+                    @Html.ValidationMessageFor(model => model.DescripcionServicio, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.FechaServicio, new { @class = "form-label" })
+
+                    @Html.TextBoxFor(
+                        model => model.FechaServicio,
+                        "{0:yyyy-MM-ddTHH:mm}",
+                        new
+                        {
+                            @class = "form-control",
+                            type = "datetime-local"
+                        })
+
+                    @Html.ValidationMessageFor(model => model.FechaServicio, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.Observaciones, new { @class = "form-label" })
+
+                    @Html.TextAreaFor(
+                        model => model.Observaciones,
+                        new
+                        {
+                            @class = "form-control",
+                            rows = "3",
+                            placeholder = "Digite observaciones adicionales"
+                        })
+
+                    @Html.ValidationMessageFor(model => model.Observaciones, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-secondary" })
+
+                    <button type="submit" class="btn btn-primary">
+                        Guardar
+                    </button>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+    $(function () {
+
+        $("#formCrearHistorial").submit(function (event) {
+
+            $(".jquery-error").remove();
+
+            var tieneErrores = false;
+
+            var vehiculo = $("#VehiculoId").val();
+            var descripcion = $("#DescripcionServicio").val().trim();
+            var fechaServicio = $("#FechaServicio").val();
+
+            if (vehiculo.length === 0 || vehiculo === "0") {
+                mostrarError("#VehiculoId", "Debe seleccionar un vehículo.");
+                tieneErrores = true;
+            }
+
+            if (descripcion.length < 5) {
+                mostrarError("#DescripcionServicio", "La descripción debe tener al menos 5 caracteres.");
+                tieneErrores = true;
+            }
+
+            if (fechaServicio.length === 0) {
+                mostrarError("#FechaServicio", "La fecha del servicio es requerida.");
+                tieneErrores = true;
+            }
+
+            if (tieneErrores) {
+                event.preventDefault();
+            }
+
+        });
+
+        function mostrarError(selector, mensaje) {
+            $(selector).after(
+                "<span class='text-danger jquery-error d-block mt-1'>" +
+                mensaje +
+                "</span>"
+            );
+        }
+
+    });
+    </script>
+
+}

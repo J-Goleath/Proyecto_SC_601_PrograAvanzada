@@ -1,9 +1,5 @@
 ﻿using AutoFix.Entities;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Web;
 
 namespace AutoFix.infraestructure.DBContext
 {
@@ -16,17 +12,18 @@ namespace AutoFix.infraestructure.DBContext
         public DbSet<CitaSolicitud> CitasSolicitud { get; set; }
         public DbSet<Notificacion> Notificaciones { get; set; }
 
+        public DbSet<OrdenTrabajo> OrdenesTrabajo { get; set; }
+        public DbSet<Repuesto> Repuestos { get; set; }
+        public DbSet<HistorialVehicular> HistorialVehicular { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            
             modelBuilder.Entity<Vehiculo>()
                 .HasRequired(v => v.Cliente)
                 .WithMany(c => c.Vehiculos)
                 .HasForeignKey(v => v.ClienteId)
                 .WillCascadeOnDelete(false);
 
-            
             modelBuilder.Entity<Vehiculo>()
                 .Property(v => v.Placa)
                 .IsRequired()
@@ -42,7 +39,6 @@ namespace AutoFix.infraestructure.DBContext
                 .IsRequired()
                 .HasMaxLength(50);
 
-            
             modelBuilder.Entity<Cliente>()
                 .Property(c => c.Correo)
                 .IsRequired()
@@ -62,11 +58,12 @@ namespace AutoFix.infraestructure.DBContext
                 .Property(c => c.Contraseña)
                 .IsRequired()
                 .HasMaxLength(100);
+
             modelBuilder.Entity<CitaSolicitud>()
-    .HasRequired(c => c.Vehiculo)
-    .WithMany()
-    .HasForeignKey(c => c.VehiculoId)
-    .WillCascadeOnDelete(false);
+                .HasRequired(c => c.Vehiculo)
+                .WithMany()
+                .HasForeignKey(c => c.VehiculoId)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CitaSolicitud>()
                 .HasOptional(c => c.Mecanico)
@@ -89,6 +86,60 @@ namespace AutoFix.infraestructure.DBContext
                 .Property(n => n.Mensaje)
                 .IsRequired()
                 .HasMaxLength(250);
+
+            modelBuilder.Entity<OrdenTrabajo>()
+                .HasRequired(o => o.Vehiculo)
+                .WithMany()
+                .HasForeignKey(o => o.VehiculoId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<OrdenTrabajo>()
+                .Property(o => o.DescripcionTrabajo)
+                .IsRequired()
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<OrdenTrabajo>()
+                .Property(o => o.Estado)
+                .IsRequired()
+                .HasMaxLength(30);
+
+            modelBuilder.Entity<OrdenTrabajo>()
+                .Property(o => o.Observaciones)
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<Repuesto>()
+                .Property(r => r.Nombre)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<Repuesto>()
+                .Property(r => r.Descripcion)
+                .HasMaxLength(300);
+
+            modelBuilder.Entity<Repuesto>()
+                .Property(r => r.PrecioUnitario)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<HistorialVehicular>()
+                .HasRequired(h => h.Vehiculo)
+                .WithMany()
+                .HasForeignKey(h => h.VehiculoId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<HistorialVehicular>()
+                .HasOptional(h => h.OrdenTrabajo)
+                .WithMany()
+                .HasForeignKey(h => h.OrdenTrabajoId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<HistorialVehicular>()
+                .Property(h => h.DescripcionServicio)
+                .IsRequired()
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<HistorialVehicular>()
+                .Property(h => h.Observaciones)
+                .HasMaxLength(500);
 
             base.OnModelCreating(modelBuilder);
         }

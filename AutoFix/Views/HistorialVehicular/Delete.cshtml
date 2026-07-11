@@ -1,0 +1,90 @@
+﻿@model AutoFix.Entities.HistorialVehicular
+
+@{
+    ViewBag.Title = "Eliminar Historial Vehicular";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Eliminar Historial Vehicular</h4>
+        </div>
+
+        <div class="card-body">
+
+            <div class="alert alert-warning">
+                ¿Está seguro que desea eliminar este registro del historial vehicular?
+            </div>
+
+            <dl class="row">
+
+                <dt class="col-sm-3">Vehículo</dt>
+                <dd class="col-sm-9">
+                    @if (Model.Vehiculo != null)
+                    {
+                        <span>@Model.Vehiculo.Placa - @Model.Vehiculo.Marca @Model.Vehiculo.Modelo</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin vehículo asociado</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Orden de Trabajo</dt>
+                <dd class="col-sm-9">
+                    @if (Model.OrdenTrabajo != null)
+                    {
+                        <span>@Model.OrdenTrabajo.DescripcionTrabajo</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin orden asociada</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.DescripcionServicio)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.DescripcionServicio)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.FechaServicio)
+                </dt>
+                <dd class="col-sm-9">
+                    @Model.FechaServicio.ToString("dd/MM/yyyy HH:mm")
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Observaciones)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Observaciones)
+                </dd>
+
+            </dl>
+
+            <hr />
+
+            @using (Html.BeginForm("Delete", "HistorialVehicular", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="d-flex justify-content-between">
+                    @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-secondary" })
+
+                    <button type="submit" class="btn btn-danger">
+                        Eliminar
+                    </button>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,85 @@
+﻿@model IEnumerable<AutoFix.Entities.HistorialVehicular>
+
+@{
+    ViewBag.Title = "Historial Vehicular";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Historial Vehicular</h4>
+        </div>
+
+        <div class="card-body">
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["Success"]
+                </div>
+            }
+
+            <p>
+                @Html.ActionLink("Registrar historial", "Create", null, new { @class = "btn btn-primary" })
+            </p>
+
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Vehículo</th>
+                        <th>Orden de Trabajo</th>
+                        <th>Descripción del Servicio</th>
+                        <th>Fecha del Servicio</th>
+                        <th>Observaciones</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (item.Vehiculo != null)
+                                {
+                                    @item.Vehiculo.Placa
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Sin vehículo</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (item.OrdenTrabajo != null)
+                                {
+                                    @item.OrdenTrabajo.DescripcionTrabajo
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Sin orden asociada</span>
+                                }
+                            </td>
+
+                            <td>@item.DescripcionServicio</td>
+                            <td>@item.FechaServicio.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@item.Observaciones</td>
+
+                            <td>
+                                @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" })
+                                @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @class = "btn btn-info btn-sm" })
+                                @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

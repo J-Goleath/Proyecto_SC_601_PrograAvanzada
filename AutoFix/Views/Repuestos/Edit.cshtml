@@ -1,0 +1,127 @@
+﻿@model AutoFix.Entities.Repuesto
+
+@{
+    ViewBag.Title = "Editar Repuesto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-warning">
+            <h4 class="mb-0">Editar Repuesto</h4>
+        </div>
+
+        <div class="card-body">
+
+            @using (Html.BeginForm("Edit", "Repuestos", FormMethod.Post, new { id = "formEditarRepuesto" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.FechaRegistro)
+                @Html.HiddenFor(model => model.Borrado)
+
+                if (!ViewData.ModelState.IsValid)
+                {
+                    @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+                }
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", placeholder = "Digite el nombre del repuesto" })
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.Descripcion, new { @class = "form-label" })
+                    @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", rows = "3", placeholder = "Digite una descripción" })
+                    @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.CantidadDisponible, new { @class = "form-label" })
+                    @Html.TextBoxFor(model => model.CantidadDisponible, new { @class = "form-control", type = "number", min = "0" })
+                    @Html.ValidationMessageFor(model => model.CantidadDisponible, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.PrecioUnitario, new { @class = "form-label" })
+
+                    @Html.TextBox(
+                        "PrecioUnitario",
+                        Model.PrecioUnitario.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture),
+                        new
+                        {
+                            @class = "form-control",
+                            type = "number",
+                            min = "0",
+                            step = "0.01"
+                        })
+
+                    @Html.ValidationMessageFor(model => model.PrecioUnitario, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-secondary" })
+
+                    <button type="submit" class="btn btn-warning">
+                        Actualizar
+                    </button>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+        $(function () {
+
+            $("#formEditarRepuesto").submit(function (event) {
+
+                $(".jquery-error").remove();
+
+                var tieneErrores = false;
+
+                var nombre = $("#Nombre").val().trim();
+                var cantidad = $("#CantidadDisponible").val();
+                var precio = $("#PrecioUnitario").val();
+
+                if (nombre.length < 3) {
+                    mostrarError("#Nombre", "El nombre debe tener al menos 3 caracteres.");
+                    tieneErrores = true;
+                }
+
+                if (cantidad.length === 0 || parseInt(cantidad) < 0) {
+                    mostrarError("#CantidadDisponible", "La cantidad debe ser mayor o igual a 0.");
+                    tieneErrores = true;
+                }
+
+                if (precio.length === 0 || parseFloat(precio) < 0) {
+                    mostrarError("#PrecioUnitario", "El precio debe ser mayor o igual a 0.");
+                    tieneErrores = true;
+                }
+
+                if (tieneErrores) {
+                    event.preventDefault();
+                }
+
+            });
+
+            function mostrarError(selector, mensaje) {
+                $(selector).after(
+                    "<span class='text-danger jquery-error d-block mt-1'>" +
+                    mensaje +
+                    "</span>"
+                );
+            }
+
+        });
+    </script>
+
+}

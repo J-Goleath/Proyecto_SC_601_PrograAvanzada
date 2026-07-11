@@ -1,0 +1,80 @@
+﻿@model AutoFix.Entities.Repuesto
+
+@{
+    ViewBag.Title = "Eliminar Repuesto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Eliminar Repuesto</h4>
+        </div>
+
+        <div class="card-body">
+
+            <div class="alert alert-warning">
+                ¿Está seguro que desea eliminar este repuesto del inventario?
+            </div>
+
+            <dl class="row">
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Nombre)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Descripcion)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Descripcion)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.CantidadDisponible)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.CantidadDisponible)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.PrecioUnitario)
+                </dt>
+                <dd class="col-sm-9">
+                    ₡@Model.PrecioUnitario.ToString("N2")
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.FechaRegistro)
+                </dt>
+                <dd class="col-sm-9">
+                    @Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")
+                </dd>
+
+            </dl>
+
+            <hr />
+
+            @using (Html.BeginForm("Delete", "Repuestos", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="d-flex justify-content-between">
+                    @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-secondary" })
+
+                    <button type="submit" class="btn btn-danger">
+                        Eliminar
+                    </button>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

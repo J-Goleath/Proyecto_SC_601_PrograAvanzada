@@ -1,0 +1,166 @@
+﻿@model AutoFix.Entities.OrdenTrabajo
+
+@{
+    ViewBag.Title = "Registrar Orden de Trabajo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Registrar Orden de Trabajo</h4>
+        </div>
+
+        <div class="card-body">
+
+            @using (Html.BeginForm("Create", "OrdenesTrabajo", FormMethod.Post, new { id = "formCrearOrdenTrabajo" }))
+            {
+                @Html.AntiForgeryToken()
+
+                if (!ViewData.ModelState.IsValid)
+                {
+                    @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+                }
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.VehiculoId, new { @class = "form-label" })
+
+                    @Html.DropDownList(
+                        "VehiculoId",
+                        null,
+                        "Seleccione un vehículo",
+                        new { @class = "form-select" })
+
+                    @Html.ValidationMessageFor(model => model.VehiculoId, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.DescripcionTrabajo, new { @class = "form-label" })
+
+                    @Html.TextAreaFor(
+                        model => model.DescripcionTrabajo,
+                        new
+                        {
+                            @class = "form-control",
+                            rows = "4",
+                            placeholder = "Digite la descripción del trabajo"
+                        })
+
+                    @Html.ValidationMessageFor(model => model.DescripcionTrabajo, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.Estado, new { @class = "form-label" })
+
+                    @Html.DropDownListFor(
+                        model => model.Estado,
+                        new SelectList(
+                            new[]
+                            {
+                                "Pendiente",
+                                "En Proceso",
+                                "Finalizada",
+                                "Cancelada"
+                            },
+                            Model != null ? Model.Estado : "Pendiente"),
+                        "Seleccione un estado",
+                        new { @class = "form-select" })
+
+                    @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.FechaFinalizacion, new { @class = "form-label" })
+
+                    @Html.TextBoxFor(
+                        model => model.FechaFinalizacion,
+                        "{0:yyyy-MM-ddTHH:mm}",
+                        new
+                        {
+                            @class = "form-control",
+                            type = "datetime-local"
+                        })
+
+                    @Html.ValidationMessageFor(model => model.FechaFinalizacion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.Observaciones, new { @class = "form-label" })
+
+                    @Html.TextAreaFor(
+                        model => model.Observaciones,
+                        new
+                        {
+                            @class = "form-control",
+                            rows = "3",
+                            placeholder = "Digite observaciones adicionales"
+                        })
+
+                    @Html.ValidationMessageFor(model => model.Observaciones, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-secondary" })
+
+                    <button type="submit" class="btn btn-primary">
+                        Guardar
+                    </button>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+        $(function () {
+
+            $("#formCrearOrdenTrabajo").submit(function (event) {
+
+                $(".jquery-error").remove();
+
+                var tieneErrores = false;
+
+                var vehiculo = $("#VehiculoId").val();
+                var descripcion = $("#DescripcionTrabajo").val().trim();
+                var estado = $("#Estado").val();
+
+                if (vehiculo.length === 0 || vehiculo === "0") {
+                    mostrarError("#VehiculoId", "Debe seleccionar un vehículo.");
+                    tieneErrores = true;
+                }
+
+                if (descripcion.length < 5) {
+                    mostrarError("#DescripcionTrabajo", "La descripción debe tener al menos 5 caracteres.");
+                    tieneErrores = true;
+                }
+
+                if (estado.length === 0) {
+                    mostrarError("#Estado", "Debe seleccionar un estado.");
+                    tieneErrores = true;
+                }
+
+                if (tieneErrores) {
+                    event.preventDefault();
+                }
+
+            });
+
+            function mostrarError(selector, mensaje) {
+                $(selector).after(
+                    "<span class='text-danger jquery-error d-block mt-1'>" +
+                    mensaje +
+                    "</span>"
+                );
+            }
+
+        });
+    </script>
+
+}
