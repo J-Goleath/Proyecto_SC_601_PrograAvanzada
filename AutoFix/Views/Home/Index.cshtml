@@ -85,7 +85,19 @@
                 <p>Gestión de citas programadas.</p>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <a href="@Url.Action("Index", "Citas")" class="btn btn-warning">Ver Citas</a>
+                    var rolCitas = Session["UsuarioRol"]?.ToString()?.ToLower() ?? "";
+                    if (rolCitas == "administrador")
+                    {
+                        <a href="@Url.Action("Index", "AsignacionCitas")" class="btn btn-warning">Asignar Citas</a>
+                    }
+                    else if (rolCitas == "mecanico")
+                    {
+                        <a href="@Url.Action("Index", "CalendarioMecanico")" class="btn btn-warning">Mi Calendario</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Index", "Citas")" class="btn btn-warning">Ver Citas</a>
+                    }
                 }
                 else
                 {
