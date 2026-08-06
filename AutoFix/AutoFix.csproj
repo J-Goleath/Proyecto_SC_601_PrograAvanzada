@@ -131,13 +131,18 @@
     <Compile Include="Controllers\CalendarioMecanicoController.cs" />
     <Compile Include="Controllers\CitasController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
+    <Compile Include="Controllers\ExpedienteVehiculoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InventarioController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\NotificacionesController.cs" />
     <Compile Include="Controllers\VehiculosController.cs" />
     <Compile Include="Entities\CitaSolicitud.cs" />
     <Compile Include="Entities\Cliente.cs" />
+    <Compile Include="Entities\MaterialUsado.cs" />
     <Compile Include="Entities\Notificacion.cs" />
+    <Compile Include="Entities\OrdenTrabajo.cs" />
+    <Compile Include="Entities\Repuesto.cs" />
     <Compile Include="Entities\Vehiculo.cs" />
     <Compile Include="Filters\CustomAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -146,17 +151,27 @@
     <Compile Include="infraestructure\DBContext\AutoFixContext.cs" />
     <Compile Include="infraestructure\Repositories\CitaSolicitudRepository.cs" />
     <Compile Include="infraestructure\Repositories\ClienteRepository.cs" />
+    <Compile Include="infraestructure\Repositories\ExpedienteVehiculoRepository.cs" />
     <Compile Include="infraestructure\Repositories\ICitaSolicitudRepository.cs" />
     <Compile Include="infraestructure\Repositories\IClienteRepository.cs" />
+    <Compile Include="infraestructure\Repositories\IExpedienteVehiculoRepository.cs" />
+    <Compile Include="infraestructure\Repositories\IMaterialUsadoRepository.cs" />
     <Compile Include="infraestructure\Repositories\INotificacionRepository.cs" />
     <Compile Include="infraestructure\Repositories\IRepository.cs" />
+    <Compile Include="infraestructure\Repositories\IRepuestoRepository.cs" />
     <Compile Include="infraestructure\Repositories\IVehiculoRepository.cs" />
+    <Compile Include="infraestructure\Repositories\MaterialUsadoRepository.cs" />
     <Compile Include="infraestructure\Repositories\NotificacionRepository.cs" />
     <Compile Include="infraestructure\Repositories\Repository.cs" />
+    <Compile Include="infraestructure\Repositories\RepuestoRepository.cs" />
     <Compile Include="infraestructure\Repositories\VehiculoRepository.cs" />
     <Compile Include="Migrations\202607091919575_InitialCreate.cs" />
     <Compile Include="Migrations\202607091919575_InitialCreate.Designer.cs">
       <DependentUpon>202607091919575_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202608060412337_AgregarInventarioYOrdenesTrabajo.cs" />
+    <Compile Include="Migrations\202608060412337_AgregarInventarioYOrdenesTrabajo.Designer.cs">
+      <DependentUpon>202608060412337_AgregarInventarioYOrdenesTrabajo.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
@@ -696,6 +711,16 @@
     <Content Include="Views\Citas\Edit.cshtml" />
     <Content Include="Views\Citas\Index.cshtml" />
     <Content Include="Views\CalendarioMecanico\Index.cshtml" />
+    <Content Include="Views\CalendarioMecanico\Listado.cshtml" />
+    <Content Include="Views\CalendarioMecanico\Detalle.cshtml" />
+    <Content Include="Views\ExpedienteVehiculo\Index.cshtml" />
+    <Content Include="Views\Inventario\Index.cshtml" />
+    <Content Include="Views\Inventario\Create.cshtml" />
+    <Content Include="Views\Inventario\Edit.cshtml" />
+    <Content Include="Views\Inventario\Details.cshtml" />
+    <Content Include="Views\Inventario\Delete.cshtml" />
+    <Content Include="Views\Inventario\HistorialUso.cshtml" />
+    <Content Include="Views\Inventario\SolicitarMateriales.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -732,6 +757,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202607091919575_InitialCreate.resx">
       <DependentUpon>202607091919575_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202608060412337_AgregarInventarioYOrdenesTrabajo.resx">
+      <DependentUpon>202608060412337_AgregarInventarioYOrdenesTrabajo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

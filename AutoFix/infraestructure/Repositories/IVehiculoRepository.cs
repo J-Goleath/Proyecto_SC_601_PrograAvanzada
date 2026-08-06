@@ -10,5 +10,6 @@ namespace AutoFix.infraestructure.Repositories
     {
         IEnumerable<Vehiculo> GetVehiculosByCliente(int clienteId);
         bool ExistePlaca(string placa);
+        Vehiculo GetByPlaca(string placa);
     }
 }

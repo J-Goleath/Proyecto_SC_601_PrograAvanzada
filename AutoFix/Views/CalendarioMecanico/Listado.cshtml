@@ -1,0 +1,86 @@
+@model IEnumerable<AutoFix.Entities.CitaSolicitud>
+@using System.Linq
+@using System.Collections.Generic
+@{
+    ViewBag.Title = "Todas mis Citas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Dictionary<int, string> estados = ViewBag.Estados;
+}
+
+<div class="container mt-4">
+
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div id="mensajeExito" class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["MensajeExito"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+    }
+    @if (TempData["MensajeError"] != null)
+    {
+        <div id="mensajeError" class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["MensajeError"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+    }
+
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Todas mis Citas Asignadas</h4>
+            <a href="@Url.Action("Index")" class="btn btn-light btn-sm"><i class="fas fa-calendar-alt"></i> Ver calendario</a>
+        </div>
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info">No tiene citas asignadas por el momento.</div>
+            }
+            else
+            {
+                <table class="table table-bordered table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Vehículo</th>
+                            <th>Cliente</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderByDescending(c => c.Fecha).ThenBy(c => c.Hora))
+                        {
+                            var estado = (estados != null && estados.ContainsKey(item.Id)) ? estados[item.Id] : "Pendiente";
+                            string clase = estado == "Completado" ? "badge-success" : estado == "EnProgreso" ? "badge-info" : estado == "Detenido" ? "badge-secondary" : "badge-warning";
+                            <tr>
+                                <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+                                <td>@item.Hora.ToString(@"hh\:mm")</td>
+                                <td>@(item.Vehiculo != null ? item.Vehiculo.Placa + " - " + item.Vehiculo.Marca + " " + item.Vehiculo.Modelo : "N/A")</td>
+                                <td>@(item.Vehiculo != null && item.Vehiculo.Cliente != null ? item.Vehiculo.Cliente.Nombre : "N/A")</td>
+                                <td>@item.DescripcionFallos</td>
+                                <td><span class="badge @clase">@estado</span></td>
+                                <td><a href="@Url.Action("Detalle", new { id = item.Id })" class="btn btn-info btn-sm">Ver</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function desplegarMensaje(nombreMensaje) {
+        const mensaje = document.getElementById(nombreMensaje);
+        if (mensaje) {
+            mensaje.style.transition = "opacity 1.5s";
+            setTimeout(function () {
+                mensaje.style.opacity = "0";
+                mensaje.remove();
+            }, 3000);
+        }
+    }
+    desplegarMensaje("mensajeExito");
+    desplegarMensaje("mensajeError");
+</script>

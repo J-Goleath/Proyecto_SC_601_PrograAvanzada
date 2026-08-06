@@ -90,6 +90,9 @@
 
                         <li>@Html.ActionLink("Notificaciones", "Index", "Notificaciones", new { area = "" }, new { @class = "nav-link" })</li>
 
+                        <!-- Expediente del Vehículo -->
+                        <li><a class="nav-link" href="@Url.Action("Index", "ExpedienteVehiculo")"><i class="fas fa-folder-open"></i> Expediente Vehículo</a></li>
+
                         if (rol.ToLower() == "mecanico" || rol.ToLower() == "administrador")
                         {
                             <li class="nav-item dropdown">
