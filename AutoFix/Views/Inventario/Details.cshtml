@@ -1,0 +1,58 @@
+@model AutoFix.Entities.Repuesto
+
+@{
+    ViewBag.Title = "Detalles del Repuesto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Detalles del Repuesto</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Codigo</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Codigo)</dd>
+
+                <dt class="col-sm-3">Nombre</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Nombre)</dd>
+
+                <dt class="col-sm-3">Categoria</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Categoria)</dd>
+
+                <dt class="col-sm-3">Stock</dt>
+                <dd class="col-sm-9">
+                    @if (Model.Stock <= 5)
+                    {
+                        <span class="badge bg-danger">@Model.Stock (Bajo Stock)</span>
+                    }
+                    else if (Model.Stock <= 10)
+                    {
+                        <span class="badge bg-warning text-dark">@Model.Stock</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">@Model.Stock</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Precio</dt>
+                <dd class="col-sm-9">@String.Format("{0:C}", Model.Precio)</dd>
+
+                <dt class="col-sm-3">Ubicacion</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Ubicacion)</dd>
+
+                <dt class="col-sm-3">Descripcion</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Descripcion)</dd>
+
+                <dt class="col-sm-3">Fecha Registro</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.FechaRegistro)</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
+        @Html.ActionLink("Volver al Listado", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+</div>

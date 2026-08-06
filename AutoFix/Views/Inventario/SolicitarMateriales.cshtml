@@ -1,0 +1,267 @@
+@model IEnumerable<AutoFix.Entities.Repuesto>
+
+@{
+    ViewBag.Title = "Solicitud de Materiales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Solicitud de Materiales</h2>
+    <p class="text-muted">Seleccione una orden de trabajo y los repuestos necesarios.</p>
+
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i>
+        <strong>Instrucciones:</strong> Seleccione una orden de trabajo activa, busque los repuestos necesarios y solicite la cantidad requerida.
+    </div>
+
+    <!-- Selección de Orden de Trabajo -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="fw-bold">Orden de Trabajo</label>
+                <select id="ordenTrabajoSelect" class="form-select" required>
+                    <option value="">-- Seleccione una orden de trabajo --</option>
+                    @foreach (var item in ViewBag.OrdenesTrabajo)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input type="text" id="buscarRepuesto" class="form-control" placeholder="Buscar por c&oacute;digo o nombre..." />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <select id="filtroCategoria" class="form-select">
+                <option value="">Todas las categor&iacute;as</option>
+                @foreach (var categoria in Model.Select(r => r.Categoria).Distinct().Where(c => !string.IsNullOrEmpty(c)))
+                {
+                    <option value="@categoria">@categoria</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <!-- Listado de repuestos -->
+    <div class="row" id="listaRepuestos">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-3 repuesto-item" data-categoria="@item.Categoria" data-nombre="@item.Nombre" data-codigo="@item.Codigo">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <span class="badge bg-secondary">@item.Codigo</span>
+                            @item.Nombre
+                        </h5>
+                        <p class="card-text">
+                            <strong>Categor&iacute;a:</strong> @(item.Categoria ?? "Sin categor&iacute;a")<br />
+                            <strong>Stock disponible:</strong>
+                            <span class="badge @(item.Stock <= 5 ? "bg-danger" : "bg-primary")">
+                                @item.Stock unidades
+                            </span><br />
+                            <strong>Precio:</strong> @String.Format("{0:C}", item.Precio)<br />
+                            <strong>Ubicaci&oacute;n:</strong> @(item.Ubicacion ?? "No especificada")
+                        </p>
+                        <hr />
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Cantidad</label>
+                                    <input type="number" class="form-control cantidadRepuesto" min="1" max="@item.Stock" value="1" />
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Prioridad</label>
+                                    <select class="form-select prioridadRepuesto">
+                                        <option value="Baja"> Baja</option>
+                                        <option value="Media" selected>Media</option>
+                                        <option value="Alta"> Alta</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-success w-100 mt-2 btn-solicitar" data-id="@item.Id" data-stock="@item.Stock">
+                            <i class="fas fa-cart-plus"></i> Solicitar Material
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="modalConfirmacion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-check-circle text-success"></i> Confirmar Solicitud
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="mensajeConfirmacion"></div>
+                <div class="mt-2">
+                    <strong>Detalles:</strong>
+                    <ul>
+                        <li id="detalleRepuesto"></li>
+                        <li id="detalleCantidad"></li>
+                        <li id="detallePrioridad"></li>
+                        <li id="detalleOrden"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmarSolicitud">
+                    <i class="fas fa-check"></i> Confirmar Solicitud
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            var repuestoSeleccionado = null;
+            var cantidadSeleccionada = 0;
+            var prioridadSeleccionada = "Media";
+            var ordenTrabajoSeleccionada = 0;
+
+            // Filtrar repuestos
+            $('#buscarRepuesto, #filtroCategoria').on('keyup change', function() {
+                var busqueda = $('#buscarRepuesto').val().toLowerCase();
+                var categoria = $('#filtroCategoria').val().toLowerCase();
+
+                $('.repuesto-item').each(function() {
+                    var nombre = $(this).data('nombre').toLowerCase();
+                    var codigo = $(this).data('codigo').toLowerCase();
+                    var cat = $(this).data('categoria')?.toLowerCase() || '';
+
+                    var coincideBusqueda = nombre.includes(busqueda) || codigo.includes(busqueda);
+                    var coincideCategoria = categoria === '' || cat === categoria;
+
+                    $(this).toggle(coincideBusqueda && coincideCategoria);
+                });
+            });
+
+            // Solicitar material
+            $('.btn-solicitar').click(function() {
+                var $card = $(this).closest('.card');
+                repuestoSeleccionado = $(this).data('id');
+                cantidadSeleccionada = $card.find('.cantidadRepuesto').val();
+                prioridadSeleccionada = $card.find('.prioridadRepuesto').val();
+                ordenTrabajoSeleccionada = $('#ordenTrabajoSelect').val();
+
+                if (!ordenTrabajoSeleccionada || ordenTrabajoSeleccionada === '') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Atencion',
+                        text: 'Debe seleccionar una Orden de Trabajo',
+                        confirmButtonColor: '#f39c12'
+                    });
+                    return;
+                }
+
+                if (cantidadSeleccionada < 1) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Atencion',
+                        text: 'La cantidad debe ser mayor a 0',
+                        confirmButtonColor: '#f39c12'
+                    });
+                    return;
+                }
+
+                var stock = $(this).data('stock');
+                if (parseInt(cantidadSeleccionada) > stock) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Stock insuficiente',
+                        text: 'No hay suficiente stock. Disponible: ' + stock,
+                        confirmButtonColor: '#d33'
+                    });
+                    return;
+                }
+
+                var nombreRepuesto = $card.find('.card-title').text().trim();
+
+                $('#detalleRepuesto').text('Repuesto: ' + nombreRepuesto);
+                $('#detalleCantidad').text('Cantidad: ' + cantidadSeleccionada);
+                $('#detallePrioridad').text('Prioridad: ' + prioridadSeleccionada);
+                $('#detalleOrden').text('Orden de Trabajo: ' + $('#ordenTrabajoSelect option:selected').text());
+
+                $('#mensajeConfirmacion').html(
+                    '<div class="alert alert-warning">' +
+                    '<i class="fas fa-exclamation-triangle"></i> ' +
+                    '¿Desea solicitar <strong>' + cantidadSeleccionada + '</strong> unidad(es) de este repuesto?<br>' +
+                    'Stock restante: <strong>' + (stock - cantidadSeleccionada) + '</strong>' +
+                    '</div>'
+                );
+
+                $('#modalConfirmacion').modal('show');
+            });
+
+            // Confirmar solicitud con SweetAlert2
+            $('#btnConfirmarSolicitud').click(function() {
+                $('#btnConfirmarSolicitud').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Procesando...');
+
+                $.ajax({
+                    url: '@Url.Action("SolicitarMaterial", "Inventario")',
+                    type: 'POST',
+                    data: {
+                        repuestoId: repuestoSeleccionado,
+                        cantidad: cantidadSeleccionada,
+                        ordenTrabajoId: ordenTrabajoSeleccionada,
+                        observaciones: 'Prioridad: ' + prioridadSeleccionada
+                    },
+                    success: function(response) {
+                        $('#modalConfirmacion').modal('hide');
+
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Exito!',
+                                text: response.message,
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                                confirmButtonColor: '#d33'
+                            });
+                        }
+                    },
+                    error: function() {
+                        $('#modalConfirmacion').modal('hide');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al procesar la solicitud',
+                            confirmButtonColor: '#d33'
+                        });
+                    },
+                    complete: function() {
+                        $('#btnConfirmarSolicitud').prop('disabled', false).html('<i class="fas fa-check"></i> Confirmar Solicitud');
+                    }
+                });
+            });
+        });
+    </script>
+}

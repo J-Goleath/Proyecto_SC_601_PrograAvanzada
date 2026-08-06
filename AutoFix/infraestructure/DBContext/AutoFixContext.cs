@@ -15,7 +15,9 @@ namespace AutoFix.infraestructure.DBContext
         public DbSet<Vehiculo> Vehiculos { get; set; }
         public DbSet<CitaSolicitud> CitasSolicitud { get; set; }
         public DbSet<Notificacion> Notificaciones { get; set; }
-
+        public DbSet<OrdenTrabajo> OrdenesTrabajo { get; set; }
+        public DbSet<Repuesto> Repuestos { get; set; }
+        public DbSet<MaterialUsado> MaterialesUsados { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -89,6 +91,91 @@ namespace AutoFix.infraestructure.DBContext
                 .Property(n => n.Mensaje)
                 .IsRequired()
                 .HasMaxLength(250);
+            // Configuración de OrdenTrabajo
+            modelBuilder.Entity<OrdenTrabajo>()
+                .HasRequired(o => o.CitaSolicitud)
+                .WithMany()
+                .HasForeignKey(o => o.CitaSolicitudId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<OrdenTrabajo>()
+                .HasRequired(o => o.Cliente)
+                .WithMany()
+                .HasForeignKey(o => o.ClienteId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<OrdenTrabajo>()
+                .HasRequired(o => o.Mecanico)
+                .WithMany()
+                .HasForeignKey(o => o.MecanicoId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<OrdenTrabajo>()
+                .Property(o => o.Estado)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<OrdenTrabajo>()
+                .Property(o => o.DescripcionTrabajo)
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<OrdenTrabajo>()
+                .Property(o => o.Diagnostico)
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<OrdenTrabajo>()
+                .Property(o => o.Observaciones)
+                .HasMaxLength(500);
+
+            // Configuración de Repuesto
+            modelBuilder.Entity<Repuesto>()
+                .Property(r => r.Precio)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Repuesto>()
+                .Property(r => r.Codigo)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Repuesto>()
+                .Property(r => r.Nombre)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<Repuesto>()
+                .Property(r => r.Categoria)
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Repuesto>()
+                .Property(r => r.Ubicacion)
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<Repuesto>()
+                .Property(r => r.Descripcion)
+                .HasMaxLength(500);
+
+            // Configuración de MaterialUsado
+            modelBuilder.Entity<MaterialUsado>()
+                .Property(m => m.CostoUnitario)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<MaterialUsado>()
+                .Property(m => m.Observaciones)
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<MaterialUsado>()
+                .HasRequired(m => m.OrdenTrabajo)
+                .WithMany(o => o.MaterialesUsados)
+                .HasForeignKey(m => m.OrdenTrabajoId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<MaterialUsado>()
+                .HasRequired(m => m.Repuesto)
+                .WithMany(r => r.MaterialesUsados)
+                .HasForeignKey(m => m.RepuestoId)
+                .WillCascadeOnDelete(false);
+
+
 
             base.OnModelCreating(modelBuilder);
         }
