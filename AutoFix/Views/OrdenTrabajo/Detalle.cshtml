@@ -1,0 +1,131 @@
+﻿@model AutoFix.Entities.OrdenTrabajo
+
+@{
+    ViewBag.Title = "Detalle de Orden de Trabajo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Detalle de Orden de Trabajo</h4>
+        </div>
+
+        <div class="card-body">
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["Success"]
+                </div>
+            }
+
+            <dl class="row">
+
+                <dt class="col-sm-3">Número de Orden</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">Cita Asociada</dt>
+                <dd class="col-sm-9">@Model.CitaSolicitudId</dd>
+
+                <dt class="col-sm-3">Cliente</dt>
+                <dd class="col-sm-9">
+                    @if (Model.Cliente != null)
+                    {
+                        @Model.Cliente.Nombre
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin cliente asociado</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Mecánico Asignado</dt>
+                <dd class="col-sm-9">
+                    @if (Model.Mecanico != null)
+                    {
+                        @Model.Mecanico.Nombre
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin mecánico asignado</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Estado</dt>
+                <dd class="col-sm-9">@Model.Estado</dd>
+
+                <dt class="col-sm-3">Prioridad</dt>
+                <dd class="col-sm-9">@Model.Prioridad</dd>
+
+                <dt class="col-sm-3">Descripción del Trabajo</dt>
+                <dd class="col-sm-9">@Model.DescripcionTrabajo</dd>
+
+                <dt class="col-sm-3">Diagnóstico</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrWhiteSpace(Model.Diagnostico))
+                    {
+                        @Model.Diagnostico
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin diagnóstico registrado</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Observaciones</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrWhiteSpace(Model.Observaciones))
+                    {
+                        @Model.Observaciones
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin observaciones</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Fecha de Asignación</dt>
+                <dd class="col-sm-9">@Model.FechaAsignacion.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                <dt class="col-sm-3">Fecha de Inicio</dt>
+                <dd class="col-sm-9">
+                    @if (Model.FechaInicio.HasValue)
+                    {
+                        @Model.FechaInicio.Value.ToString("dd/MM/yyyy HH:mm")
+                    }
+                    else
+                    {
+                        <span class="text-muted">No iniciada</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Fecha de Finalización</dt>
+                <dd class="col-sm-9">
+                    @if (Model.FechaFinalizacion.HasValue)
+                    {
+                        @Model.FechaFinalizacion.Value.ToString("dd/MM/yyyy HH:mm")
+                    }
+                    else
+                    {
+                        <span class="text-muted">Pendiente</span>
+                    }
+                </dd>
+
+            </dl>
+
+            <hr />
+
+            <div class="d-flex justify-content-between">
+                @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-secondary" })
+
+                @Html.ActionLink("Actualizar estado", "ActualizarEstado", new { id = Model.Id }, new { @class = "btn btn-warning" })
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
