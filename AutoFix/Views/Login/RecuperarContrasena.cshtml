@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Recuperar Contraseña";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white text-center">
+                    <h4><i class="fas fa-key"></i> Recuperar Contraseña</h4>
+                </div>
+                <div class="card-body">
+
+                    <p class="text-muted">Ingrese el correo asociado a su cuenta. Le pediremos un dato adicional para verificar su identidad.</p>
+
+                    @if (!string.IsNullOrEmpty(ViewBag.Error))
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Error
+                        </div>
+                    }
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group mb-3">
+                            <label for="correo" class="font-weight-bold">Correo Electrónico</label>
+                            <input type="email" name="correo" id="correo" class="form-control" placeholder="correo@ejemplo.com" required />
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-arrow-right"></i> Continuar
+                            </button>
+                        </div>
+                    }
+
+                    <hr />
+                    <p class="text-center">
+                        <a href="@Url.Action("Index", "Login")"><i class="fas fa-arrow-left"></i> Volver a Iniciar Sesión</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

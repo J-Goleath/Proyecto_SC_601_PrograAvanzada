@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AutoFix.Entities
 {
+    [Table("MaterialesUsados")]
     public class MaterialUsado
     {
         [Key]

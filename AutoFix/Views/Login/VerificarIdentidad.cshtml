@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Verificar Identidad";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white text-center">
+                    <h4><i class="fas fa-user-shield"></i> Verificar Identidad</h4>
+                </div>
+                <div class="card-body">
+
+                    <p class="text-muted">Para confirmar que es usted, ingrese el número de teléfono registrado en su cuenta.</p>
+
+                    @if (!string.IsNullOrEmpty(ViewBag.Error))
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Error
+                        </div>
+                    }
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group mb-3">
+                            <label for="telefono" class="font-weight-bold">Teléfono</label>
+                            <input type="tel" name="telefono" id="telefono" class="form-control" placeholder="Ingrese su teléfono" required />
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-check"></i> Verificar
+                            </button>
+                        </div>
+                    }
+
+                    <hr />
+                    <p class="text-center">
+                        <a href="@Url.Action("Index", "Login")"><i class="fas fa-arrow-left"></i> Cancelar y volver a Iniciar Sesión</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
