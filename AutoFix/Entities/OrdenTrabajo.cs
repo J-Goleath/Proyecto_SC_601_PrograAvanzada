@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AutoFix.Entities
 {
+    [Table("OrdenesTrabajo")]
     public class OrdenTrabajo
     {
         [Key]

@@ -136,9 +136,11 @@
     <Compile Include="Controllers\InventarioController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\NotificacionesController.cs" />
+    <Compile Include="Controllers\OrdenTrabajoController.cs" />
     <Compile Include="Controllers\VehiculosController.cs" />
     <Compile Include="Entities\CitaSolicitud.cs" />
     <Compile Include="Entities\Cliente.cs" />
+    <Compile Include="Entities\EstadoOrden.cs" />
     <Compile Include="Entities\MaterialUsado.cs" />
     <Compile Include="Entities\Notificacion.cs" />
     <Compile Include="Entities\OrdenTrabajo.cs" />
@@ -157,11 +159,13 @@
     <Compile Include="infraestructure\Repositories\IExpedienteVehiculoRepository.cs" />
     <Compile Include="infraestructure\Repositories\IMaterialUsadoRepository.cs" />
     <Compile Include="infraestructure\Repositories\INotificacionRepository.cs" />
+    <Compile Include="infraestructure\Repositories\IOrdenTrabajoRepository.cs" />
     <Compile Include="infraestructure\Repositories\IRepository.cs" />
     <Compile Include="infraestructure\Repositories\IRepuestoRepository.cs" />
     <Compile Include="infraestructure\Repositories\IVehiculoRepository.cs" />
     <Compile Include="infraestructure\Repositories\MaterialUsadoRepository.cs" />
     <Compile Include="infraestructure\Repositories\NotificacionRepository.cs" />
+    <Compile Include="infraestructure\Repositories\OrdenTrabajoRepository.cs" />
     <Compile Include="infraestructure\Repositories\Repository.cs" />
     <Compile Include="infraestructure\Repositories\RepuestoRepository.cs" />
     <Compile Include="infraestructure\Repositories\VehiculoRepository.cs" />
@@ -173,8 +177,11 @@
     <Compile Include="Migrations\202608060412337_AgregarInventarioYOrdenesTrabajo.Designer.cs">
       <DependentUpon>202608060412337_AgregarInventarioYOrdenesTrabajo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202608071530074_SincronizarModeloOrdenTrabajo.cs" />
+    <Compile Include="Migrations\202608071530074_SincronizarModeloOrdenTrabajo.Designer.cs">
+      <DependentUpon>202608071530074_SincronizarModeloOrdenTrabajo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\PasswordHelper.cs" />
   </ItemGroup>
@@ -721,6 +728,9 @@
     <Content Include="Views\Inventario\Delete.cshtml" />
     <Content Include="Views\Inventario\HistorialUso.cshtml" />
     <Content Include="Views\Inventario\SolicitarMateriales.cshtml" />
+    <Content Include="Views\OrdenTrabajo\Index.cshtml" />
+    <Content Include="Views\OrdenTrabajo\Detalle.cshtml" />
+    <Content Include="Views\OrdenTrabajo\ActualizarEstado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -760,6 +770,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202608060412337_AgregarInventarioYOrdenesTrabajo.resx">
       <DependentUpon>202608060412337_AgregarInventarioYOrdenesTrabajo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202608071530074_SincronizarModeloOrdenTrabajo.resx">
+      <DependentUpon>202608071530074_SincronizarModeloOrdenTrabajo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
