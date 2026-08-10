@@ -1,59 +1,162 @@
-﻿@model IEnumerable<AutoFix.Entities.CitaSolicitud>
-
+@model IEnumerable<AutoFix.Entities.CitaSolicitud>
+@using System.Linq
+@using System.Collections.Generic
 @{
-    ViewBag.Title = "Mis Citas Asignadas";
+    ViewBag.Title = "Calendario Operativo";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<DateTime> dias = ViewBag.Dias;
+    int[] horas = ViewBag.Horas;
+    DateTime inicioSemana = ViewBag.InicioSemana;
+    DateTime finSemana = ViewBag.FinSemana;
+    DateTime semanaAnterior = ViewBag.SemanaAnterior;
+    DateTime semanaSiguiente = ViewBag.SemanaSiguiente;
+    Dictionary<int, string> estados = ViewBag.Estados;
+    AutoFix.Entities.CitaSolicitud proximaCita = ViewBag.ProximaCita;
+
+    string[] nombresDias = { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes" };
+    string[] nombresMeses = { "", "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre" };
+
+    Func<string, string> claseBadge = estado =>
+    {
+        switch (estado)
+        {
+            case "Completado": return "badge-success";
+            case "EnProgreso": return "badge-info";
+            case "Detenido": return "badge-secondary";
+            default: return "badge-warning";
+        }
+    };
+
+    Func<string, string> etiquetaEstado = estado =>
+    {
+        switch (estado)
+        {
+            case "Completado": return "Completado";
+            case "EnProgreso": return "En Progreso";
+            case "Detenido": return "Detenido";
+            default: return "Pendiente";
+        }
+    };
+
+    string rangoSemana = inicioSemana.Day + " - " + finSemana.Day + " de " + nombresMeses[finSemana.Month] + ", " + finSemana.Year;
 }
 
-<div class="container mt-4">
+<div class="container-fluid mt-4">
 
     @if (TempData["MensajeExito"] != null)
     {
         <div id="mensajeExito" class="alert alert-success alert-dismissible fade show" role="alert">
             @TempData["MensajeExito"]
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+    }
+    @if (TempData["MensajeError"] != null)
+    {
+        <div id="mensajeError" class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["MensajeError"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
     }
 
-    <div class="card shadow">
-        <div class="card-header bg-dark text-white">
-            <h4>Mis Citas Asignadas</h4>
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <h4 class="mb-2 mb-md-0"><i class="fas fa-calendar-alt"></i> Calendario Operativo del Mecánico</h4>
+        <div class="btn-group">
+            <a class="btn btn-outline-dark btn-sm" href="@Url.Action("Index", new { fecha = DateTime.Today.ToString("yyyy-MM-dd") })">Hoy</a>
+            <a class="btn btn-outline-dark btn-sm" href="@Url.Action("Index", new { fecha = semanaAnterior.ToString("yyyy-MM-dd") })">&lt;</a>
+            <span class="btn btn-dark btn-sm disabled">@rangoSemana</span>
+            <a class="btn btn-outline-dark btn-sm" href="@Url.Action("Index", new { fecha = semanaSiguiente.ToString("yyyy-MM-dd") })">&gt;</a>
         </div>
-        <div class="card-body">
+    </div>
 
-            @if (!Model.Any())
-            {
-                <div class="alert alert-info">
-                    No tiene citas asignadas por el momento.
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="card shadow">
+                <div class="card-body p-2">
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center mb-0" style="table-layout:fixed;">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th style="width:70px;">Hora</th>
+                                    @for (int i = 0; i < dias.Count; i++)
+                                    {
+                                        <th>
+                                            @nombresDias[i]<br />
+                                            <small>@dias[i].ToString("dd/MM")</small>
+                                        </th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var hora in horas)
+                                {
+                                    <tr>
+                                        <td class="bg-dark text-white font-weight-bold align-middle">@hora.ToString("00"):00</td>
+                                        @foreach (var dia in dias)
+                                        {
+                                            var citasCelda = Model.Where(c => c.Fecha.Date == dia.Date && c.Hora.Hours == hora).ToList();
+                                            <td style="vertical-align:top; min-height:70px;">
+                                                @foreach (var cita in citasCelda)
+                                                {
+                                                    var estadoCita = estados.ContainsKey(cita.Id) ? estados[cita.Id] : "Pendiente";
+                                                    <a href="@Url.Action("Detalle", new { id = cita.Id })" class="d-block text-decoration-none mb-1">
+                                                        <div class="p-1 border rounded bg-light text-dark text-left" style="font-size:0.78rem;">
+                                                            <strong>@(cita.Vehiculo != null ? cita.Vehiculo.Placa + " - " + cita.Vehiculo.Marca : "N/A")</strong><br />
+                                                            <span>@cita.DescripcionFallos</span><br />
+                                                            <span class="badge @claseBadge(estadoCita)">@etiquetaEstado(estadoCita)</span>
+                                                        </div>
+                                                    </a>
+                                                }
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            }
-            else
-            {
-                <div class="list-group">
-                    @foreach (var item in Model)
+            </div>
+            <p class="text-muted text-center mt-2">Seleccione una cita para ver el detalle del servicio.</p>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="card shadow mb-3">
+                <div class="card-header bg-dark text-white">Resumen General</div>
+                <div class="card-body">
+                    <small class="text-muted d-block mb-3">Semana del @inicioSemana.ToString("dd/MM") al @finSemana.ToString("dd/MM")</small>
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span><i class="fas fa-hourglass-half text-warning"></i> Órdenes Pendientes</span>
+                        <span class="h5 mb-0">@ViewBag.TotalPendientes</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span><i class="fas fa-spinner text-info"></i> En Progreso</span>
+                        <span class="h5 mb-0">@ViewBag.TotalEnProgreso</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-check-circle text-success"></i> Completadas</span>
+                        <span class="h5 mb-0">@ViewBag.TotalCompletadas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">Próxima Cita</div>
+                <div class="card-body">
+                    @if (proximaCita != null)
                     {
-                        <div class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                            <div>
-                                <strong>
-                                    @(item.Vehiculo != null ? item.Vehiculo.Placa + " - " + item.Vehiculo.Marca + " " + item.Vehiculo.Modelo : "N/A")
-                                </strong>
-                                <br />
-                                <span class="text-muted">@item.DescripcionFallos</span>
-                                <br />
-                                <span class="text-muted">
-                                    Cliente: @(item.Vehiculo != null && item.Vehiculo.Cliente != null ? item.Vehiculo.Cliente.Nombre : "N/A")
-                                </span>
-                            </div>
-                            <div class="text-right">
-                                <div>@item.Fecha.ToString("dd/MM/yyyy")</div>
-                                <div class="text-muted">@item.Hora.ToString(@"hh\:mm")</div>
-                            </div>
-                        </div>
+                        <p class="mb-1"><strong>@proximaCita.Fecha.ToString("dd/MM/yyyy")</strong></p>
+                        <p class="mb-1"><i class="far fa-clock"></i> @proximaCita.Hora.ToString(@"hh\:mm")</p>
+                        <p class="mb-1">@(proximaCita.Vehiculo != null ? proximaCita.Vehiculo.Placa + " - " + proximaCita.Vehiculo.Marca + " " + proximaCita.Vehiculo.Modelo : "N/A")</p>
+                        <p class="text-muted small mb-0">@proximaCita.DescripcionFallos</p>
                     }
+                    else
+                    {
+                        <p class="text-muted mb-0">No tiene próximas citas</p>
+                    }
+                    <a href="@Url.Action("Listado")" class="btn btn-outline-dark btn-sm w-100 mt-3">Ver todas las citas</a>
                 </div>
-            }
+            </div>
         </div>
     </div>
 </div>
@@ -70,4 +173,5 @@
         }
     }
     desplegarMensaje("mensajeExito");
+    desplegarMensaje("mensajeError");
 </script>

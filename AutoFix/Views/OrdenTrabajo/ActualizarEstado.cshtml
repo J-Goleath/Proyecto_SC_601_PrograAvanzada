@@ -1,0 +1,124 @@
+﻿@model AutoFix.Entities.OrdenTrabajo
+
+@{
+    ViewBag.Title = "Actualizar Estado de Orden";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-warning">
+            <h4 class="mb-0">Actualizar Estado de Orden de Trabajo</h4>
+        </div>
+
+        <div class="card-body">
+
+            <dl class="row">
+
+                <dt class="col-sm-3">Número de Orden</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">Cliente</dt>
+                <dd class="col-sm-9">
+                    @if (Model.Cliente != null)
+                    {
+                        @Model.Cliente.Nombre
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin cliente asociado</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Mecánico</dt>
+                <dd class="col-sm-9">
+                    @if (Model.Mecanico != null)
+                    {
+                        @Model.Mecanico.Nombre
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin mecánico asignado</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Descripción del Trabajo</dt>
+                <dd class="col-sm-9">@Model.DescripcionTrabajo</dd>
+
+            </dl>
+
+            <hr />
+
+            @using (Html.BeginForm("ActualizarEstado", "OrdenTrabajo", FormMethod.Post, new { id = "formActualizarEstado" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="mb-3">
+                    <label class="form-label">Estado</label>
+
+                    @Html.DropDownList(
+                        "estado",
+                        ViewBag.Estados as IEnumerable<SelectListItem>,
+                        "Seleccione un estado",
+                        new { @class = "form-select", id = "estado" }
+                    )
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Observaciones</label>
+
+                    @Html.TextArea(
+                        "observaciones",
+                        Model.Observaciones,
+                        new
+                        {
+                            @class = "form-control",
+                            rows = "4",
+                            placeholder = "Digite las observaciones de la orden"
+                        }
+                    )
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    @Html.ActionLink("Volver", "Detalle", new { id = Model.Id }, new { @class = "btn btn-secondary" })
+
+                    <button type="submit" class="btn btn-warning">
+                        Actualizar
+                    </button>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+    $(function () {
+
+        $("#formActualizarEstado").submit(function (event) {
+
+            $(".jquery-error").remove();
+
+            var estado = $("#estado").val();
+
+            if (estado.length === 0) {
+                $("#estado").after(
+                    "<span class='text-danger jquery-error d-block mt-1'>Debe seleccionar un estado.</span>"
+                );
+
+                event.preventDefault();
+            }
+
+        });
+
+    });
+    </script>
+
+}

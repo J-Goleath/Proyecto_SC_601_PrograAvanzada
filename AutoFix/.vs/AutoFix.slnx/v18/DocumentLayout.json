@@ -1,14 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\AutoFix\\",
+  "WorkspaceRootPath": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|c:\\autofix\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|d:\\u\\sc-601 programacio\u0301n avanzada\\proyecto_sc_601_prograavanzada\\autofix\\infraestructure\\repositories\\iexpedientevehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:infraestructure\\repositories\\iexpedientevehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|c:\\autofix\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|d:\\u\\sc-601 programacio\u0301n avanzada\\proyecto_sc_601_prograavanzada\\autofix\\infraestructure\\repositories\\expedientevehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:infraestructure\\repositories\\expedientevehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|d:\\u\\sc-601 programacio\u0301n avanzada\\proyecto_sc_601_prograavanzada\\autofix\\infraestructure\\repositories\\vehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:infraestructure\\repositories\\vehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|d:\\u\\sc-601 programacio\u0301n avanzada\\proyecto_sc_601_prograavanzada\\autofix\\infraestructure\\repositories\\ivehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:infraestructure\\repositories\\ivehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,28 +46,54 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\AutoFix\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
-              "ToolTip": "C:\\AutoFix\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-07-07T04:02:38.04Z",
+              "DocumentIndex": 0,
+              "Title": "IExpedienteVehiculoRepository.cs",
+              "DocumentMoniker": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\IExpedienteVehiculoRepository.cs",
+              "RelativeDocumentMoniker": "infraestructure\\Repositories\\IExpedienteVehiculoRepository.cs",
+              "ToolTip": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\IExpedienteVehiculoRepository.cs",
+              "RelativeToolTip": "infraestructure\\Repositories\\IExpedienteVehiculoRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-06T18:35:55.234Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "C:\\AutoFix\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "C:\\AutoFix\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAkAAABuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-07-07T04:02:08.188Z",
+              "DocumentIndex": 1,
+              "Title": "ExpedienteVehiculoRepository.cs",
+              "DocumentMoniker": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\ExpedienteVehiculoRepository.cs",
+              "RelativeDocumentMoniker": "infraestructure\\Repositories\\ExpedienteVehiculoRepository.cs",
+              "ToolTip": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\ExpedienteVehiculoRepository.cs",
+              "RelativeToolTip": "infraestructure\\Repositories\\ExpedienteVehiculoRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-06T18:35:25.88Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "VehiculoRepository.cs",
+              "DocumentMoniker": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\VehiculoRepository.cs",
+              "RelativeDocumentMoniker": "infraestructure\\Repositories\\VehiculoRepository.cs",
+              "ToolTip": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\VehiculoRepository.cs",
+              "RelativeToolTip": "infraestructure\\Repositories\\VehiculoRepository.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-06T18:35:18.463Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IVehiculoRepository.cs",
+              "DocumentMoniker": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\IVehiculoRepository.cs",
+              "RelativeDocumentMoniker": "infraestructure\\Repositories\\IVehiculoRepository.cs",
+              "ToolTip": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\IVehiculoRepository.cs",
+              "RelativeToolTip": "infraestructure\\Repositories\\IVehiculoRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-06T18:35:16.883Z",
               "EditorCaption": ""
             }
           ]

@@ -1,0 +1,88 @@
+@model AutoFix.Entities.CitaSolicitud
+@using System.Linq
+@{
+    ViewBag.Title = "Detalle de la Cita";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    AutoFix.Entities.OrdenTrabajo orden = ViewBag.Orden;
+    string estado = ViewBag.Estado;
+    string clase = estado == "Completado" ? "badge-success" : estado == "EnProgreso" ? "badge-info" : estado == "Detenido" ? "badge-secondary" : "badge-warning";
+}
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Detalle de Orden de Trabajo</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Datos del Vehículo</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">Placa</dt>
+                        <dd class="col-sm-8">@(Model.Vehiculo != null ? Model.Vehiculo.Placa : "N/A")</dd>
+                        <dt class="col-sm-4">Marca</dt>
+                        <dd class="col-sm-8">@(Model.Vehiculo != null ? Model.Vehiculo.Marca : "N/A")</dd>
+                        <dt class="col-sm-4">Modelo</dt>
+                        <dd class="col-sm-8">@(Model.Vehiculo != null ? Model.Vehiculo.Modelo : "N/A")</dd>
+                        <dt class="col-sm-4">Año</dt>
+                        <dd class="col-sm-8">@(Model.Vehiculo != null ? Model.Vehiculo.Anio.ToString() : "N/A")</dd>
+                    </dl>
+
+                    <h5>Datos de la Cita</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">Fecha</dt>
+                        <dd class="col-sm-8">@Model.Fecha.ToString("dd/MM/yyyy")</dd>
+                        <dt class="col-sm-4">Hora</dt>
+                        <dd class="col-sm-8">@Model.Hora.ToString(@"hh\:mm")</dd>
+                        <dt class="col-sm-4">Cliente</dt>
+                        <dd class="col-sm-8">@(Model.Vehiculo != null && Model.Vehiculo.Cliente != null ? Model.Vehiculo.Cliente.Nombre : "N/A")</dd>
+                    </dl>
+
+                    <h5>Descripción del Problema</h5>
+                    <p class="border rounded p-2 bg-light">@Model.DescripcionFallos</p>
+                </div>
+
+                <div class="col-md-6">
+                    <h5>Estado de la Orden</h5>
+                    <span class="badge @clase mb-3" style="font-size:1rem;">@estado</span>
+
+                    @if (orden != null)
+                    {
+                        <h5>Diagnóstico</h5>
+                        <p class="border rounded p-2 bg-light">@(string.IsNullOrWhiteSpace(orden.Diagnostico) ? "Sin diagnóstico registrado" : orden.Diagnostico)</p>
+
+                        <h5>Observaciones del Mecánico</h5>
+                        <p class="border rounded p-2 bg-light">@(string.IsNullOrWhiteSpace(orden.Observaciones) ? "Sin observaciones" : orden.Observaciones)</p>
+
+                        <h5>Materiales Utilizados</h5>
+                        @if (orden.MaterialesUsados != null && orden.MaterialesUsados.Any(m => !m.Borrado))
+                        {
+                            <ul class="list-group">
+                                @foreach (var mat in orden.MaterialesUsados.Where(m => !m.Borrado))
+                                {
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <span>@(mat.Repuesto != null ? mat.Repuesto.Nombre : "N/A")</span>
+                                        <span class="text-muted">Cantidad: @mat.Cantidad</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted">Aún no se han registrado materiales para esta orden.</p>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            Aún no se ha generado la orden de trabajo formal para esta cita.
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <a href="@Url.Action("Index")" class="btn btn-secondary mt-3">Volver al Calendario</a>
+        </div>
+    </div>
+</div>

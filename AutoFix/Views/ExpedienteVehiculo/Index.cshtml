@@ -1,0 +1,176 @@
+@model AutoFix.Entities.Vehiculo
+@using System.Linq
+@{
+    ViewBag.Title = "Expediente del Vehículo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var historial = ViewBag.Historial as System.Collections.Generic.List<AutoFix.Entities.OrdenTrabajo>;
+    string placaBuscada = ViewBag.PlacaBuscada;
+    var vehiculosCliente = ViewBag.VehiculosCliente as System.Collections.Generic.List<AutoFix.Entities.Vehiculo>;
+
+    Func<string, string> claseBadge = estado =>
+    {
+        switch ((estado ?? "").Trim())
+        {
+            case "Completado": return "badge-success";
+            case "EnProgreso": return "badge-info";
+            case "Detenido": return "badge-secondary";
+            default: return "badge-warning";
+        }
+    };
+}
+
+<style>
+    @@media print {
+        nav, .no-print, footer {
+            display: none !important;
+        }
+    }
+</style>
+
+<div class="container mt-4">
+
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div id="mensajeExito" class="alert alert-success alert-dismissible fade show no-print" role="alert">
+            @TempData["MensajeExito"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+    }
+
+    @if (TempData["MensajeError"] != null)
+    {
+        <div id="mensajeError" class="alert alert-danger alert-dismissible fade show no-print" role="alert">
+            @TempData["MensajeError"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+    }
+
+    <div class="card shadow no-print">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0"><i class="fas fa-car-side"></i> Expediente del Vehículo</h4>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm("Index", "ExpedienteVehiculo", FormMethod.Get))
+            {
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-5">
+                        <label class="font-weight-bold">Buscar Vehículo por Placa</label>
+                        <input type="text" name="placa" class="form-control" placeholder="Ej: CCR-145" value="@placaBuscada" />
+                    </div>
+                    <div class="col-md-auto">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+                    </div>
+                    <div class="col-md-auto">
+                        <a href="@Url.Action("Index")" class="btn btn-secondary"><i class="fas fa-times"></i> Limpiar</a>
+                    </div>
+                </div>
+            }
+
+            @if (vehiculosCliente != null && vehiculosCliente.Any())
+            {
+                <hr />
+                <p class="mb-1 font-weight-bold">Mis vehículos:</p>
+                foreach (var v in vehiculosCliente)
+                {
+                    <a href="@Url.Action("Index", new { placa = v.Placa })" class="btn btn-outline-dark btn-sm mb-1">@v.Placa - @v.Marca @v.Modelo</a>
+                }
+            }
+        </div>
+    </div>
+
+    @if (Model != null)
+    {
+        <div class="card shadow mt-3">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-car"></i> @Model.Marca @Model.Modelo @Model.Anio</span>
+                <button type="button" class="btn btn-light btn-sm no-print" onclick="window.print()">
+                    <i class="fas fa-file-pdf"></i> Exportar PDF
+                </button>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-3">Propietario: <strong>@(Model.Cliente != null ? Model.Cliente.Nombre : "N/A")</strong></p>
+
+                <div class="row text-center mb-4">
+                    <div class="col-md-4">
+                        <div class="border rounded p-3">
+                            <div class="text-muted small">Placa</div>
+                            <div class="h5 mb-0">@Model.Placa</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="border rounded p-3">
+                            <div class="text-muted small">Reparaciones</div>
+                            <div class="h5 mb-0">@(historial != null ? historial.Count : 0) Registros</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="border rounded p-3">
+                            <div class="text-muted small">Última Visita</div>
+                            <div class="h5 mb-0">
+                                @(historial != null && historial.Any()
+                                    ? (historial.First().FechaFinalizacion ?? historial.First().FechaAsignacion).ToString("dd/MM/yyyy")
+                                    : "Sin registros")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-wrench"></i> Historial de Reparaciones</span>
+                </h5>
+
+                @if (historial == null || !historial.Any())
+                {
+                    <div class="alert alert-info">Este vehículo aún no tiene reparaciones ni órdenes de trabajo registradas.</div>
+                }
+                else
+                {
+                    foreach (var orden in historial)
+                    {
+                        var estado = string.IsNullOrWhiteSpace(orden.Estado) ? "Pendiente" : orden.Estado;
+                        <div class="border rounded p-3 mb-2">
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <strong>@(string.IsNullOrWhiteSpace(orden.DescripcionTrabajo) ? "Servicio sin descripción" : orden.DescripcionTrabajo)</strong>
+                                <span class="badge @claseBadge(estado)">@estado</span>
+                            </div>
+                            <div class="text-muted small mt-1">
+                                @((orden.FechaFinalizacion ?? orden.FechaAsignacion).ToString("dd/MM/yyyy"))
+                                &nbsp;·&nbsp; Mecánico: @(orden.Mecanico != null ? orden.Mecanico.Nombre : "N/A")
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(orden.Diagnostico))
+                            {
+                                <div class="mt-2"><strong>Diagnóstico:</strong> @orden.Diagnostico</div>
+                            }
+                            @if (orden.MaterialesUsados != null && orden.MaterialesUsados.Any(m => !m.Borrado))
+                            {
+                                <div class="mt-2">
+                                    <strong>Repuestos utilizados:</strong>
+                                    @foreach (var mat in orden.MaterialesUsados.Where(m => !m.Borrado))
+                                    {
+                                        <span class="badge badge-light border mr-1">@(mat.Repuesto != null ? mat.Repuesto.Nombre : "N/A") x@mat.Cantidad</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    function desplegarMensaje(nombreMensaje) {
+        const mensaje = document.getElementById(nombreMensaje);
+        if (mensaje) {
+            mensaje.style.transition = "opacity 1.5s";
+            setTimeout(function () {
+                mensaje.style.opacity = "0";
+                mensaje.remove();
+            }, 3000);
+        }
+    }
+    desplegarMensaje("mensajeExito");
+    desplegarMensaje("mensajeError");
+</script>

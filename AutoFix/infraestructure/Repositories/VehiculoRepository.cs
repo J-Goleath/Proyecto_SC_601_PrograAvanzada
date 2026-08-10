@@ -22,5 +22,10 @@ namespace AutoFix.infraestructure.Repositories
         {
             return Context.Vehiculos.Any(v => v.Placa.Equals(placa, System.StringComparison.OrdinalIgnoreCase) && !v.Borrado);
         }
+
+        public Vehiculo GetByPlaca(string placa)
+        {
+            return Context.Vehiculos.FirstOrDefault(v => v.Placa.Equals(placa, System.StringComparison.OrdinalIgnoreCase) && !v.Borrado);
+        }
     }
 }
