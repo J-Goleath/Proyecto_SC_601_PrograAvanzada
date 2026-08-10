@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B70E7F81-AC66-4092-B460-7BC3D2C27618}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AutoFix.Application</RootNamespace>
+    <AssemblyName>AutoFix.Application</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Common\ErrorCodes.cs" />
+    <Compile Include="Common\Result.cs" />
+    <Compile Include="Common\ResultError.cs" />
+    <Compile Include="DTOs\CitaDTO.cs" />
+    <Compile Include="DTOs\ClienteDTO.cs" />
+    <Compile Include="DTOs\ExpedienteVehiculoDTO.cs" />
+    <Compile Include="DTOs\MaterialUsadoDTO.cs" />
+    <Compile Include="DTOs\NotificacionDTO.cs" />
+    <Compile Include="DTOs\OrdenTrabajoDTO.cs" />
+    <Compile Include="DTOs\RepuestoDTO.cs" />
+    <Compile Include="DTOs\VehiculoDTO.cs" />
+    <Compile Include="Interfaces\ICitaService.cs" />
+    <Compile Include="Interfaces\IClienteService.cs" />
+    <Compile Include="Interfaces\IExpedienteVehiculoService.cs" />
+    <Compile Include="Interfaces\IMaterialUsadoService.cs" />
+    <Compile Include="Interfaces\INotificacionService.cs" />
+    <Compile Include="Interfaces\IOrdenTrabajoService.cs" />
+    <Compile Include="Interfaces\IRepuestoService.cs" />
+    <Compile Include="Interfaces\IVehiculoService.cs" />
+    <Compile Include="Mappings\AutoFixMappings.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CitaService.cs" />
+    <Compile Include="Services\ClienteService.cs" />
+    <Compile Include="Services\ExpedienteVehiculoService.cs" />
+    <Compile Include="Services\MaterialUsadoService.cs" />
+    <Compile Include="Services\NotificacionService.cs" />
+    <Compile Include="Services\OrdenTrabajoService.cs" />
+    <Compile Include="Services\RepuestoService.cs" />
+    <Compile Include="Services\VehiculoService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AutoFix\AutoFix.csproj">
+      <Project>{103e6b55-bd1f-4416-82bc-6cd465485168}</Project>
+      <Name>AutoFix</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
