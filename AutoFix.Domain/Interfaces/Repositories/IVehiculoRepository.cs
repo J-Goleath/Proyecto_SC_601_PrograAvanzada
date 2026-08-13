@@ -1,10 +1,10 @@
-﻿using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
-namespace AutoFix.infraestructure.Repositories
+namespace AutoFix.Domain.Interfaces.Repositories
 {
     public interface IVehiculoRepository : IRepository<Vehiculo>
     {

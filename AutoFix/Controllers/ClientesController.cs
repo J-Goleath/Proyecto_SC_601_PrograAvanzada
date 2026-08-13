@@ -1,4 +1,5 @@
-﻿using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using AutoFix.Filters;
 using AutoFix.infraestructure.DBContext;
 using AutoFix.infraestructure.Repositories;
@@ -22,7 +23,7 @@ namespace AutoFix.Controllers
             _clienteRepository = new ClienteRepository(_context);
         }
 
-        // ✅ PROTEGIDO - Solo Administradores
+        // ? PROTEGIDO - Solo Administradores
         [HttpGet]
         public ActionResult Index()
         {
@@ -30,7 +31,7 @@ namespace AutoFix.Controllers
             return View(clientes);
         }
 
-        // ✅ PÚBLICO - Registro de clientes (SIN AUTENTICACIÓN)
+        // ? PÚBLICO - Registro de clientes (SIN AUTENTICACIÓN)
         [HttpGet]
         [AllowAnonymous]
         public ActionResult Create()
@@ -39,7 +40,7 @@ namespace AutoFix.Controllers
             return View(new Cliente());
         }
 
-        // ✅ PÚBLICO - Registro de clientes (SIN AUTENTICACIÓN)
+        // ? PÚBLICO - Registro de clientes (SIN AUTENTICACIÓN)
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
@@ -72,7 +73,7 @@ namespace AutoFix.Controllers
             return View(cliente);
         }
 
-        // ✅ PROTEGIDO - Solo Administradores
+        // ? PROTEGIDO - Solo Administradores
         [HttpGet]
         public ActionResult Edit(int id)
         {
@@ -87,7 +88,7 @@ namespace AutoFix.Controllers
             return View(cliente);
         }
 
-        // ✅ PROTEGIDO - Solo Administradores
+        // ? PROTEGIDO - Solo Administradores
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Cliente cliente)
@@ -130,7 +131,7 @@ namespace AutoFix.Controllers
             return View(cliente);
         }
 
-        // ✅ PROTEGIDO - Solo Administradores
+        // ? PROTEGIDO - Solo Administradores
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
@@ -155,7 +156,7 @@ namespace AutoFix.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ✅ PROTEGIDO - Solo Administradores
+        // ? PROTEGIDO - Solo Administradores
         [HttpGet]
         public ActionResult Details(int id)
         {
@@ -190,3 +191,5 @@ namespace AutoFix.Controllers
         }
     }
 }
+
+

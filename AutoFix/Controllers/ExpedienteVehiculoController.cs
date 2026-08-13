@@ -1,3 +1,5 @@
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using AutoFix.Filters;
 using AutoFix.infraestructure.DBContext;
 using AutoFix.infraestructure.Repositories;
@@ -51,14 +53,14 @@ namespace AutoFix.Controllers
 
             if (vehiculo == null)
             {
-                TempData["MensajeError"] = "No se encontró ningún vehículo con la placa \"" + placa + "\"";
+                TempData["MensajeError"] = "No se encontrÃ³ ningÃºn vehÃ­culo con la placa \"" + placa + "\"";
                 ViewBag.PlacaBuscada = placa;
                 return View();
             }
 
             if (Rol.Equals("Cliente", StringComparison.OrdinalIgnoreCase) && vehiculo.ClienteId != UsuarioId)
             {
-                TempData["MensajeError"] = "Ese vehículo no pertenece a su cuenta";
+                TempData["MensajeError"] = "Ese vehÃ­culo no pertenece a su cuenta";
                 ViewBag.PlacaBuscada = placa;
                 return View();
             }
@@ -81,3 +83,5 @@ namespace AutoFix.Controllers
         }
     }
 }
+
+

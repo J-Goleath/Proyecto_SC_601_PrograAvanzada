@@ -1,4 +1,6 @@
-﻿using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
+using AutoFix.Domain.Enums;
 using AutoFix.infraestructure.Repositories;
 using System;
 using System.Linq;
@@ -141,3 +143,5 @@ namespace AutoFix.Controllers
         }
     }
 }
+
+

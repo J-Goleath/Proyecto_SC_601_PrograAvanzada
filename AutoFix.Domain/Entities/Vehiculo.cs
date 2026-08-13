@@ -1,11 +1,12 @@
-﻿using System;
+﻿using AutoFix.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace AutoFix.Entities
+namespace AutoFix.Domain.Entities
 {
     [Table("Vehiculos")]
     public class Vehiculo

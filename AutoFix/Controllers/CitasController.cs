@@ -1,4 +1,5 @@
-using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using AutoFix.Filters;
 using AutoFix.infraestructure.DBContext;
 using AutoFix.infraestructure.Repositories;
@@ -58,7 +59,7 @@ namespace AutoFix.Controllers
             {
                 if (!VehiculoPerteneceAlCliente(cita.VehiculoId))
                 {
-                    ModelState.AddModelError("VehiculoId", "El vehículo seleccionado no es válido");
+                    ModelState.AddModelError("VehiculoId", "El vehÃ­culo seleccionado no es vÃ¡lido");
                     CargarVehiculosEnViewBag();
                     return View(cita);
                 }
@@ -144,7 +145,7 @@ namespace AutoFix.Controllers
 
                 if (!VehiculoPerteneceAlCliente(cita.VehiculoId))
                 {
-                    ModelState.AddModelError("VehiculoId", "El vehículo seleccionado no es válido");
+                    ModelState.AddModelError("VehiculoId", "El vehÃ­culo seleccionado no es vÃ¡lido");
                     CargarVehiculosEnViewBag();
                     return View(cita);
                 }
@@ -212,3 +213,5 @@ namespace AutoFix.Controllers
         }
     }
 }
+
+

@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../AutoFix.Domain/AutoFix.Domain.csproj" Id="ab504234-d7d7-4e78-b080-0ec1a1841e58" />
   <Project Path="AutoFix.csproj" Id="103e6b55-bd1f-4416-82bc-6cd465485168" />
 </Solution>

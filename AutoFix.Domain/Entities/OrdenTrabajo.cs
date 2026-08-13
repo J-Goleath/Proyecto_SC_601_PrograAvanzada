@@ -1,9 +1,10 @@
-﻿using System;
+﻿using AutoFix.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AutoFix.Entities
+namespace AutoFix.Domain.Entities
 {
     [Table("OrdenesTrabajo")]
     public class OrdenTrabajo

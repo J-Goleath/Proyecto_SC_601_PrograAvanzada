@@ -1,4 +1,4 @@
-﻿using AutoFix.Entities;
+﻿using AutoFix.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -181,3 +181,5 @@ namespace AutoFix.infraestructure.DBContext
         }
     }
 }
+
+

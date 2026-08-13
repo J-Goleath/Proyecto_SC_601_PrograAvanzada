@@ -1,4 +1,5 @@
-﻿using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using AutoFix.Filters;
 using AutoFix.infraestructure.DBContext;
 using AutoFix.infraestructure.Repositories;
@@ -148,3 +149,5 @@ namespace AutoFix.Controllers
         }
     }
 }
+
+

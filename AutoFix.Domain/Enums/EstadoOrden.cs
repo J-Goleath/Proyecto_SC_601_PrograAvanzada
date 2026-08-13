@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AutoFix.Entities
+namespace AutoFix.Domain.Enums
 {
     public enum EstadoOrden
     {

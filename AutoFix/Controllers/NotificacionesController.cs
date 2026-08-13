@@ -1,3 +1,5 @@
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using AutoFix.Filters;
 using AutoFix.infraestructure.DBContext;
 using AutoFix.infraestructure.Repositories;
@@ -56,7 +58,7 @@ namespace AutoFix.Controllers
                 _notificacionRepository.Update(notificacion);
             }
 
-            TempData["MensajeExito"] = "Todas las notificaciones fueron marcadas como leídas";
+            TempData["MensajeExito"] = "Todas las notificaciones fueron marcadas como leÃ­das";
             return RedirectToAction(nameof(Index));
         }
 
@@ -70,3 +72,5 @@ namespace AutoFix.Controllers
         }
     }
 }
+
+

@@ -1,9 +1,9 @@
-using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using AutoFix.infraestructure.DBContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 namespace AutoFix.infraestructure.Repositories
 {
     public class CitaSolicitudRepository : Repository<CitaSolicitud>, ICitaSolicitudRepository
@@ -56,3 +56,5 @@ namespace AutoFix.infraestructure.Repositories
         }
     }
 }
+
+

@@ -138,14 +138,6 @@
     <Compile Include="Controllers\NotificacionesController.cs" />
     <Compile Include="Controllers\OrdenTrabajoController.cs" />
     <Compile Include="Controllers\VehiculosController.cs" />
-    <Compile Include="Entities\CitaSolicitud.cs" />
-    <Compile Include="Entities\Cliente.cs" />
-    <Compile Include="Entities\EstadoOrden.cs" />
-    <Compile Include="Entities\MaterialUsado.cs" />
-    <Compile Include="Entities\Notificacion.cs" />
-    <Compile Include="Entities\OrdenTrabajo.cs" />
-    <Compile Include="Entities\Repuesto.cs" />
-    <Compile Include="Entities\Vehiculo.cs" />
     <Compile Include="Filters\CustomAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -154,15 +146,6 @@
     <Compile Include="infraestructure\Repositories\CitaSolicitudRepository.cs" />
     <Compile Include="infraestructure\Repositories\ClienteRepository.cs" />
     <Compile Include="infraestructure\Repositories\ExpedienteVehiculoRepository.cs" />
-    <Compile Include="infraestructure\Repositories\ICitaSolicitudRepository.cs" />
-    <Compile Include="infraestructure\Repositories\IClienteRepository.cs" />
-    <Compile Include="infraestructure\Repositories\IExpedienteVehiculoRepository.cs" />
-    <Compile Include="infraestructure\Repositories\IMaterialUsadoRepository.cs" />
-    <Compile Include="infraestructure\Repositories\INotificacionRepository.cs" />
-    <Compile Include="infraestructure\Repositories\IOrdenTrabajoRepository.cs" />
-    <Compile Include="infraestructure\Repositories\IRepository.cs" />
-    <Compile Include="infraestructure\Repositories\IRepuestoRepository.cs" />
-    <Compile Include="infraestructure\Repositories\IVehiculoRepository.cs" />
     <Compile Include="infraestructure\Repositories\MaterialUsadoRepository.cs" />
     <Compile Include="infraestructure\Repositories\NotificacionRepository.cs" />
     <Compile Include="infraestructure\Repositories\OrdenTrabajoRepository.cs" />
@@ -734,6 +717,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Entities\" />
     <Folder Include="Models\" />
     <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
@@ -774,6 +758,12 @@
     <EmbeddedResource Include="Migrations\202608071530074_SincronizarModeloOrdenTrabajo.resx">
       <DependentUpon>202608071530074_SincronizarModeloOrdenTrabajo.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AutoFix.Domain\AutoFix.Domain.csproj">
+      <Project>{ab504234-d7d7-4e78-b080-0ec1a1841e58}</Project>
+      <Name>AutoFix.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

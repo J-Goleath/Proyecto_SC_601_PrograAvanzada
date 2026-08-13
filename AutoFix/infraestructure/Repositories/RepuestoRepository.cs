@@ -1,9 +1,9 @@
-﻿using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using AutoFix.infraestructure.DBContext;
 using AutoFix.infraestructure.Repositories;
 using System.Collections.Generic;
 using System.Linq;
-
 namespace AutoFix.infraestructure.Repositories
 {
     public class RepuestoRepository : Repository<Repuesto>, IRepuestoRepository
@@ -45,3 +45,5 @@ namespace AutoFix.infraestructure.Repositories
         }
     }
 }
+
+

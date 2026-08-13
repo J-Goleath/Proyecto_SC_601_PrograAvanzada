@@ -1,3 +1,4 @@
+﻿using AutoFix.Domain.Interfaces.Repositories;
 using AutoFix.Filters;
 using AutoFix.infraestructure.DBContext;
 using AutoFix.infraestructure.Repositories;
@@ -83,7 +84,7 @@ namespace AutoFix.Controllers
             var cita = _citaRepository.GetById(id);
             if (cita == null || cita.Borrado || cita.MecanicoId != MecanicoId)
             {
-                TempData["MensajeError"] = "La cita no existe o no está asignada a usted";
+                TempData["MensajeError"] = "La cita no existe o no estÃ¡ asignada a usted";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -141,3 +142,5 @@ namespace AutoFix.Controllers
         }
     }
 }
+
+

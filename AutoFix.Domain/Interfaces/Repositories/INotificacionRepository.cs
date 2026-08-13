@@ -1,7 +1,8 @@
-using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using System.Collections.Generic;
 
-namespace AutoFix.infraestructure.Repositories
+namespace AutoFix.Domain.Interfaces.Repositories
 {
     public interface INotificacionRepository : IRepository<Notificacion>
     {
@@ -9,3 +10,4 @@ namespace AutoFix.infraestructure.Repositories
         IEnumerable<Notificacion> GetNoLeidasByCliente(int clienteId);
     }
 }
+
