@@ -1,10 +1,11 @@
-﻿using System;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
 
-namespace AutoFix.infraestructure.Repositories
+namespace AutoFix.Domain.Interfaces.Repositories
 {
     public  interface IRepository<T> where T : class
     {

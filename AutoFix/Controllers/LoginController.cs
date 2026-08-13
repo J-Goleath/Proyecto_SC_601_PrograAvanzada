@@ -1,4 +1,5 @@
-﻿using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using AutoFix.infraestructure.DBContext;
 using AutoFix.infraestructure.Repositories;
 using AutoFix.Utils;
@@ -48,7 +49,7 @@ namespace AutoFix.Controllers
                 Session["UsuarioNombre"] = cliente.Nombre;
                 Session["UsuarioRol"] = cliente.Rol.ToString();
 
-                // ✅ CREAR TICKET DE AUTENTICACIÓN CON ROL
+                // ? CREAR TICKET DE AUTENTICACIÓN CON ROL
                 var roles = cliente.Rol.ToString(); // "Administrador", "Mecanico", "Cliente"
                 var authTicket = new FormsAuthenticationTicket(
                     1,
@@ -84,3 +85,5 @@ namespace AutoFix.Controllers
         }
     }
 }
+
+

@@ -1,11 +1,11 @@
-﻿using AutoFix.infraestructure.DBContext;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.infraestructure.DBContext;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
-
 namespace AutoFix.infraestructure.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
@@ -69,3 +69,5 @@ namespace AutoFix.infraestructure.Repositories
         }
     }
 }
+
+

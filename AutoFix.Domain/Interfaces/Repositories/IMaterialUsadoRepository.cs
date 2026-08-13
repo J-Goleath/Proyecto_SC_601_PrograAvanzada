@@ -1,8 +1,8 @@
-﻿using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using System;
 using System.Collections.Generic;
-
-namespace AutoFix.infraestructure.Repositories
+namespace AutoFix.Domain.Interfaces.Repositories
 {
     public interface IMaterialUsadoRepository : IRepository<MaterialUsado>
     {

@@ -1,8 +1,9 @@
+﻿using AutoFix.Domain.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AutoFix.Entities
+namespace AutoFix.Domain.Entities
 {
     [Table("Notificaciones")]
     public class Notificacion
@@ -15,12 +16,12 @@ namespace AutoFix.Entities
         [Display(Name = "Mensaje")]
         public string Mensaje { get; set; }
 
-        [Display(Name = "Fecha de Envío")]
+        [Display(Name = "Fecha de EnvÃ­o")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime FechaEnvio { get; set; }
 
-        [Display(Name = "Leída")]
+        [Display(Name = "LeÃ­da")]
         public bool Leida { get; set; } = false;
 
         public bool Borrado { get; set; } = false;
@@ -38,3 +39,4 @@ namespace AutoFix.Entities
         }
     }
 }
+

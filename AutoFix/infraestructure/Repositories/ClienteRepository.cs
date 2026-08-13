@@ -1,11 +1,11 @@
-﻿using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using AutoFix.infraestructure.DBContext;
 using AutoFix.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
 namespace AutoFix.infraestructure.Repositories
 {
     public class ClienteRepository : Repository<Cliente>, IClienteRepository
@@ -43,3 +43,5 @@ namespace AutoFix.infraestructure.Repositories
         }
     }
 }
+
+

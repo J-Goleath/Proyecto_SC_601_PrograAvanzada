@@ -1,9 +1,9 @@
-﻿using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using AutoFix.infraestructure.DBContext;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-
 namespace AutoFix.infraestructure.Repositories
 {
     public class OrdenTrabajoRepository : IOrdenTrabajoRepository
@@ -61,3 +61,5 @@ namespace AutoFix.infraestructure.Repositories
         }
     }
 }
+
+

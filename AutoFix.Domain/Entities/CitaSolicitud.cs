@@ -1,8 +1,9 @@
+﻿using AutoFix.Domain.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AutoFix.Entities
+namespace AutoFix.Domain.Entities
 {
     [Table("CitasSolicitud")]
     public class CitaSolicitud
@@ -21,9 +22,9 @@ namespace AutoFix.Entities
         [DataType(DataType.Time)]
         public TimeSpan Hora { get; set; }
 
-        [Required(ErrorMessage = "La descripción del problema es obligatoria")]
-        [StringLength(500, ErrorMessage = "La descripción no puede exceder los 500 caracteres")]
-        [Display(Name = "Descripción de Fallos")]
+        [Required(ErrorMessage = "La descripciÃ³n del problema es obligatoria")]
+        [StringLength(500, ErrorMessage = "La descripciÃ³n no puede exceder los 500 caracteres")]
+        [Display(Name = "DescripciÃ³n de Fallos")]
         public string DescripcionFallos { get; set; }
 
         [Display(Name = "Procesada")]
@@ -36,15 +37,15 @@ namespace AutoFix.Entities
 
         public bool Borrado { get; set; } = false;
 
-        [Required(ErrorMessage = "El vehículo es obligatorio")]
-        [Display(Name = "Vehículo")]
+        [Required(ErrorMessage = "El vehÃ­culo es obligatorio")]
+        [Display(Name = "VehÃ­culo")]
         public int VehiculoId { get; set; }
 
         [ForeignKey("VehiculoId")]
         public virtual Vehiculo Vehiculo { get; set; }
 
-        // Mecánico asignado a la cita (nullable: se asigna después, no al crearla)
-        [Display(Name = "Mecánico Asignado")]
+        // MecÃ¡nico asignado a la cita (nullable: se asigna despuÃ©s, no al crearla)
+        [Display(Name = "MecÃ¡nico Asignado")]
         public int? MecanicoId { get; set; }
 
         [ForeignKey("MecanicoId")]
@@ -56,3 +57,4 @@ namespace AutoFix.Entities
         }
     }
 }
+

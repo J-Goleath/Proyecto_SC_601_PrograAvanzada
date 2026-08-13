@@ -1,4 +1,5 @@
-using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using AutoFix.Filters;
 using AutoFix.infraestructure.DBContext;
 using AutoFix.infraestructure.Repositories;
@@ -57,7 +58,7 @@ namespace AutoFix.Controllers
             var mecanico = _clienteRepository.GetById(mecanicoId);
             if (mecanico == null || mecanico.Rol != RolUsuario.Mecanico)
             {
-                TempData["MensajeError"] = "El mecánico seleccionado no es válido";
+                TempData["MensajeError"] = "El mecÃ¡nico seleccionado no es vÃ¡lido";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -70,14 +71,14 @@ namespace AutoFix.Controllers
                 var notificacion = new Notificacion
                 {
                     ClienteId = cita.Vehiculo.ClienteId,
-                    Mensaje = "Se le asignó el mecánico " + mecanico.Nombre + " para su cita del " + cita.Fecha.ToString("dd/MM/yyyy") + ".",
+                    Mensaje = "Se le asignÃ³ el mecÃ¡nico " + mecanico.Nombre + " para su cita del " + cita.Fecha.ToString("dd/MM/yyyy") + ".",
                     FechaEnvio = DateTime.Now,
                     Leida = false
                 };
                 _notificacionRepository.Add(notificacion);
             }
 
-            TempData["MensajeExito"] = "Mecánico asignado correctamente";
+            TempData["MensajeExito"] = "MecÃ¡nico asignado correctamente";
             return RedirectToAction(nameof(Index));
         }
 
@@ -91,7 +92,7 @@ namespace AutoFix.Controllers
                 cita.MecanicoId = null;
                 cita.Procesada = false;
                 _citaRepository.Update(cita);
-                TempData["MensajeExito"] = "Asignación removida";
+                TempData["MensajeExito"] = "AsignaciÃ³n removida";
             }
             else
             {
@@ -111,3 +112,5 @@ namespace AutoFix.Controllers
         }
     }
 }
+
+

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using AutoFix.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace AutoFix.Entities
+namespace AutoFix.Domain.Entities
 {
     public class Repuesto
     {

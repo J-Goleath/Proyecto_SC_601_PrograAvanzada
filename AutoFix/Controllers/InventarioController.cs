@@ -1,4 +1,5 @@
-﻿using AutoFix.Entities;
+﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Entities;
 using AutoFix.infraestructure.DBContext;
 using AutoFix.infraestructure.Repositories;
 using System;
@@ -173,12 +174,12 @@ namespace AutoFix.Controllers
                     .OrderBy(r => r.Nombre)
                     .ToList();
 
-                // ✅ Obtener órdenes de trabajo activas
+                // ? Obtener órdenes de trabajo activas
                 var ordenes = _context.OrdenesTrabajo
                     .Where(o => !o.Borrado && o.Estado != "Completada")
                     .ToList();
 
-                // ✅ Si no hay órdenes, mostrar mensaje
+                // ? Si no hay órdenes, mostrar mensaje
                 if (!ordenes.Any())
                 {
                     ViewBag.Mensaje = "No hay órdenes de trabajo activas disponibles.";
@@ -278,3 +279,5 @@ namespace AutoFix.Controllers
         }
     }
 }
+
+
