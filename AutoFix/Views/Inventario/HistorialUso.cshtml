@@ -1,4 +1,4 @@
-@model IEnumerable<AutoFix.Entities.MaterialUsado>
+@model IEnumerable<AutoFix.Application.DTOs.MaterialUsadoHistorialDTO>
 
 @{
     ViewBag.Title = "Historial de Uso de Materiales";
@@ -25,13 +25,13 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>OT-@item.OrdenTrabajoId</td>
-                        <td>@Html.DisplayFor(modelItem => item.Repuesto.Nombre)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Cantidad)</td>
+                        <td>OT-@item.OrdenTrabajoId (@item.OrdenTrabajoEstado)</td>
+                        <td>@item.RepuestoNombre</td>
+                        <td>@item.Cantidad</td>
                         <td>@String.Format("{0:C}", item.CostoUnitario)</td>
-                        <td>@String.Format("{0:C}", item.Cantidad * item.CostoUnitario)</td>
-                        <td>@Html.DisplayFor(modelItem => item.FechaUso)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Observaciones)</td>
+                        <td>@String.Format("{0:C}", item.Total)</td>
+                        <td>@item.FechaUso.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@item.Observaciones</td>
                     </tr>
                 }
             </tbody>

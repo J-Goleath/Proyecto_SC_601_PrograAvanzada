@@ -1,7 +1,7 @@
-﻿using AutoFix.Application.DTOs;
+using AutoFix.Application.DTOs;
 using AutoFix.Application.Interfaces;
 using AutoFix.Application.Common;
-using AutoFix.infraestructure.Repositories;
+using AutoFix.Domain.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,18 +46,30 @@ namespace AutoFix.Application.Services
                         FechaRegistro = vehiculo.FechaRegistro,
                         Borrado = vehiculo.Borrado
                     },
-                    HistorialReparaciones = historial.Select(o => new OrdenTrabajoDTO
+                    HistorialReparaciones = historial.Select(o => new HistorialReparacionDTO
                     {
-                        Id = o.Id,
-                        DescripcionTrabajo = o.DescripcionTrabajo,
+                        OrdenTrabajoId = o.Id,
+                        Descripcion = o.DescripcionTrabajo,
                         Diagnostico = o.Diagnostico,
-                        Estado = o.Estado,
-                        FechaAsignacion = o.FechaAsignacion,
-                        FechaInicio = o.FechaInicio,
-                        FechaFinalizacion = o.FechaFinalizacion,
+                        Estado = string.IsNullOrWhiteSpace(o.Estado) ? "Pendiente" : o.Estado,
+                        Fecha = o.FechaFinalizacion ?? o.FechaAsignacion,
                         MecanicoNombre = o.Mecanico?.Nombre ?? "N/A",
-                        Prioridad = o.Prioridad
-                    }).ToList(),
+                        MaterialesUsados = o.MaterialesUsados == null
+                            ? new List<MaterialUsadoDTO>()
+                            : o.MaterialesUsados.Where(m => !m.Borrado).Select(m => new MaterialUsadoDTO
+                            {
+                                Id = m.Id,
+                                OrdenTrabajoId = m.OrdenTrabajoId,
+                                RepuestoId = m.RepuestoId,
+                                RepuestoNombre = m.Repuesto?.Nombre ?? "N/A",
+                                RepuestoCodigo = m.Repuesto?.Codigo ?? "N/A",
+                                Cantidad = m.Cantidad,
+                                CostoUnitario = m.CostoUnitario,
+                                Observaciones = m.Observaciones,
+                                FechaUso = m.FechaUso,
+                                Borrado = m.Borrado
+                            }).ToList()
+                    }).OrderByDescending(h => h.Fecha).ToList(),
                     TotalReparaciones = historial.Count,
                     UltimaReparacion = historial.Any() ? historial.Max(o => o.FechaFinalizacion ?? o.FechaAsignacion) : (DateTime?)null
                 };

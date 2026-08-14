@@ -1,9 +1,9 @@
-﻿using AutoFix.Application.DTOs;
+using AutoFix.Application.DTOs;
 using AutoFix.Application.Interfaces;
 using AutoFix.Application.Common;
-using AutoFix.Entities;
-using AutoFix.infraestructure.Repositories;
-using AutoFix.Utils;
+using AutoFix.Domain.Entities;
+using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,7 +113,7 @@ namespace AutoFix.Application.Services
             }
         }
 
-        public Result<ClienteDTO> Update(ClienteDTO dto)
+        public Result<ClienteDTO> Update(UpdateClienteDTO dto)
         {
             try
             {
@@ -121,9 +121,19 @@ namespace AutoFix.Application.Services
                 if (cliente == null || cliente.Borrado)
                     return Result<ClienteDTO>.Fail(ResultError.NotFound("Cliente"));
 
+                var correoDuplicado = _clienteRepository.ExisteCorreo(dto.Correo);
+                if (correoDuplicado && cliente.Correo != dto.Correo)
+                    return Result<ClienteDTO>.Fail(ResultError.AlreadyExists("Cliente con este correo"));
+
                 cliente.Nombre = dto.Nombre;
+                cliente.Correo = dto.Correo;
                 cliente.Telefono = dto.Telefono;
                 cliente.Rol = (RolUsuario)Enum.Parse(typeof(RolUsuario), dto.Rol);
+
+                if (!string.IsNullOrEmpty(dto.Contraseña))
+                {
+                    cliente.Contraseña = PasswordHelper.Encriptar(dto.Contraseña);
+                }
 
                 _clienteRepository.Update(cliente);
                 return Result<ClienteDTO>.Ok(MapToDTO(cliente));

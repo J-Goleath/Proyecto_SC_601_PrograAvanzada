@@ -1,7 +1,7 @@
 ﻿using AutoFix.Domain.Interfaces.Repositories;
 using AutoFix.Domain.Entities;
 using AutoFix.infraestructure.DBContext;
-using AutoFix.Utils;
+using AutoFix.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

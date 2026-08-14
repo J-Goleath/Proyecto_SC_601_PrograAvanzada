@@ -1,18 +1,19 @@
-﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Domain.Interfaces.Repositories;
 using AutoFix.Domain.Entities;
 using AutoFix.infraestructure.DBContext;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+
 namespace AutoFix.infraestructure.Repositories
 {
     public class OrdenTrabajoRepository : IOrdenTrabajoRepository
     {
         private readonly AutoFixContext db;
 
-        public OrdenTrabajoRepository()
+        public OrdenTrabajoRepository(AutoFixContext context)
         {
-            db = new AutoFixContext();
+            db = context;
         }
 
         public IEnumerable<OrdenTrabajo> ObtenerTodas()
@@ -61,5 +62,3 @@ namespace AutoFix.infraestructure.Repositories
         }
     }
 }
-
-

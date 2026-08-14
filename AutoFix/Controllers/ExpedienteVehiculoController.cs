@@ -1,8 +1,5 @@
-﻿using AutoFix.Domain.Interfaces.Repositories;
-using AutoFix.Domain.Entities;
+using AutoFix.Application.Interfaces;
 using AutoFix.Filters;
-using AutoFix.infraestructure.DBContext;
-using AutoFix.infraestructure.Repositories;
 using System;
 using System.Linq;
 using System.Web.Mvc;
@@ -13,15 +10,15 @@ namespace AutoFix.Controllers
     [CustomAuthorize(Roles = "Administrador,Mecanico,Cliente")]
     public class ExpedienteVehiculoController : Controller
     {
-        private readonly IVehiculoRepository _vehiculoRepository;
-        private readonly IExpedienteVehiculoRepository _expedienteRepository;
-        private readonly AutoFixContext _context;
+        private readonly IVehiculoService _vehiculoService;
+        private readonly IExpedienteVehiculoService _expedienteService;
 
-        public ExpedienteVehiculoController()
+        public ExpedienteVehiculoController(
+            IVehiculoService vehiculoService,
+            IExpedienteVehiculoService expedienteService)
         {
-            _context = new AutoFixContext();
-            _vehiculoRepository = new VehiculoRepository(_context);
-            _expedienteRepository = new ExpedienteVehiculoRepository(_context);
+            _vehiculoService = vehiculoService;
+            _expedienteService = expedienteService;
         }
 
         private string Rol
@@ -37,10 +34,10 @@ namespace AutoFix.Controllers
         [HttpGet]
         public ActionResult Index(string placa)
         {
-
             if (Rol.Equals("Cliente", StringComparison.OrdinalIgnoreCase))
             {
-                ViewBag.VehiculosCliente = _vehiculoRepository.GetVehiculosByCliente(UsuarioId).ToList();
+                var resultadoVehiculos = _vehiculoService.GetByCliente(UsuarioId);
+                ViewBag.VehiculosCliente = resultadoVehiculos.Success ? resultadoVehiculos.Value : new System.Collections.Generic.List<AutoFix.Application.DTOs.VehiculoDTO>();
             }
 
             if (string.IsNullOrWhiteSpace(placa))
@@ -49,39 +46,28 @@ namespace AutoFix.Controllers
             }
 
             placa = placa.Trim();
-            var vehiculo = _vehiculoRepository.GetByPlaca(placa);
 
-            if (vehiculo == null)
+            var resultadoExpediente = _expedienteService.GetExpedienteByPlaca(placa);
+            if (!resultadoExpediente.Success)
             {
-                TempData["MensajeError"] = "No se encontrÃ³ ningÃºn vehÃ­culo con la placa \"" + placa + "\"";
+                TempData["MensajeError"] = "No se encontró ningún vehículo con la placa \"" + placa + "\"";
                 ViewBag.PlacaBuscada = placa;
                 return View();
             }
 
-            if (Rol.Equals("Cliente", StringComparison.OrdinalIgnoreCase) && vehiculo.ClienteId != UsuarioId)
+            var expediente = resultadoExpediente.Value;
+
+            if (Rol.Equals("Cliente", StringComparison.OrdinalIgnoreCase) && expediente.Vehiculo.ClienteId != UsuarioId)
             {
-                TempData["MensajeError"] = "Ese vehÃ­culo no pertenece a su cuenta";
+                TempData["MensajeError"] = "Ese vehículo no pertenece a su cuenta";
                 ViewBag.PlacaBuscada = placa;
                 return View();
             }
-
-            var historial = _expedienteRepository.GetHistorialPorVehiculo(vehiculo.Id).ToList();
 
             ViewBag.PlacaBuscada = placa;
-            ViewBag.Historial = historial;
+            ViewBag.Historial = expediente.HistorialReparaciones;
 
-            return View(vehiculo);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-            base.Dispose(disposing);
+            return View(expediente.Vehiculo);
         }
     }
 }
-
-

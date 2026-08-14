@@ -1,4 +1,4 @@
-@model IEnumerable<AutoFix.Entities.CitaSolicitud>
+@model IEnumerable<AutoFix.Domain.Entities.CitaSolicitud>
 @using System.Linq
 @using System.Collections.Generic
 @{
@@ -12,7 +12,7 @@
     DateTime semanaAnterior = ViewBag.SemanaAnterior;
     DateTime semanaSiguiente = ViewBag.SemanaSiguiente;
     Dictionary<int, string> estados = ViewBag.Estados;
-    AutoFix.Entities.CitaSolicitud proximaCita = ViewBag.ProximaCita;
+    AutoFix.Domain.Entities.CitaSolicitud proximaCita = ViewBag.ProximaCita;
 
     string[] nombresDias = { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes" };
     string[] nombresMeses = { "", "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre" };

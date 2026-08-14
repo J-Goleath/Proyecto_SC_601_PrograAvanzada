@@ -1,4 +1,4 @@
-﻿@model AutoFix.Entities.Cliente
+﻿@model AutoFix.Application.DTOs.CreateClienteDTO
 
 @{
     ViewBag.Title = "Registrar Cliente";
@@ -14,8 +14,7 @@
             @using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
-                @Html.HiddenFor(model => model.Id)
-                @Html.HiddenFor(model => model.FechaRegistro)
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
                 <div class="row">
                     <div class="col-md-6">
@@ -64,13 +63,6 @@
                                 new { @class = "form-control" }
                             )
                             @Html.ValidationMessageFor(model => model.Rol, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.FechaRegistro, new { @class = "font-weight-bold" })
-                            @Html.TextBoxFor(model => model.FechaRegistro, new { @class = "form-control", @readonly = "readonly" })
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-@model AutoFix.Entities.Repuesto
+@model AutoFix.Application.DTOs.UpdateRepuestoDTO
 
 @{
     ViewBag.Title = "Editar Repuesto";
@@ -16,8 +16,6 @@
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.Id)
-            @Html.HiddenFor(model => model.FechaRegistro)
-            @Html.HiddenFor(model => model.Borrado)
 
             <div class="row">
                 <div class="col-md-6">

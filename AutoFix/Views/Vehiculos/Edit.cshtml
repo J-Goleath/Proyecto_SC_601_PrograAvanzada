@@ -1,4 +1,4 @@
-﻿@model AutoFix.Entities.Vehiculo
+﻿@model AutoFix.Application.DTOs.UpdateVehiculoDTO
 
 @{
     ViewBag.Title = "Editar Vehículo";
@@ -15,8 +15,7 @@
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(model => model.Id)
-                @Html.HiddenFor(model => model.FechaRegistro)
-                @Html.HiddenFor(model => model.Borrado)
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
                 <div class="row">
                     <div class="col-md-6">
@@ -66,15 +65,6 @@
                             @Html.LabelFor(model => model.Color, new { @class = "font-weight-bold" })
                             @Html.TextBoxFor(model => model.Color, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Color, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.FechaRegistro, new { @class = "font-weight-bold" })
-                            @Html.TextBoxFor(model => model.FechaRegistro, new { @class = "form-control", @readonly = "readonly" })
                         </div>
                     </div>
                 </div>

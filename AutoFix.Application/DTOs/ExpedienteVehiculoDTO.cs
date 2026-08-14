@@ -1,15 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoFix.Application.DTOs
 {
     public class ExpedienteVehiculoDTO
     {
         public VehiculoDTO Vehiculo { get; set; }
-        public List<OrdenTrabajoDTO> HistorialReparaciones { get; set; }
+        public List<HistorialReparacionDTO> HistorialReparaciones { get; set; }
         public int TotalReparaciones { get; set; }
         public DateTime? UltimaReparacion { get; set; }
     }

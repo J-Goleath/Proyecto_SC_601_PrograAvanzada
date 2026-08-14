@@ -1,8 +1,8 @@
-﻿using AutoFix.Application.DTOs;
+using AutoFix.Application.DTOs;
 using AutoFix.Application.Interfaces;
 using AutoFix.Application.Common;
-using AutoFix.Entities;
-using AutoFix.infraestructure.Repositories;
+using AutoFix.Domain.Entities;
+using AutoFix.Domain.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -132,7 +132,6 @@ namespace AutoFix.Application.Services
                 if (vehiculo == null || vehiculo.Borrado)
                     return Result<CitaDTO>.Fail(ResultError.NotFound("Vehículo"));
 
-                // Verificar disponibilidad del mecánico
                 if (dto.MecanicoId.HasValue)
                 {
                     var mecanico = _clienteRepository.GetById(dto.MecanicoId.Value);
@@ -169,6 +168,10 @@ namespace AutoFix.Application.Services
                 if (cita == null || cita.Borrado)
                     return Result<CitaDTO>.Fail(ResultError.NotFound("Cita"));
 
+                var vehiculo = _vehiculoRepository.GetById(dto.VehiculoId);
+                if (vehiculo == null || vehiculo.Borrado)
+                    return Result<CitaDTO>.Fail(ResultError.NotFound("Vehículo"));
+
                 if (dto.MecanicoId.HasValue)
                 {
                     var mecanico = _clienteRepository.GetById(dto.MecanicoId.Value);
@@ -179,6 +182,7 @@ namespace AutoFix.Application.Services
                 cita.Fecha = dto.Fecha;
                 cita.Hora = dto.Hora;
                 cita.DescripcionFallos = dto.DescripcionFallos;
+                cita.VehiculoId = dto.VehiculoId;
                 cita.MecanicoId = dto.MecanicoId;
                 cita.Procesada = dto.Procesada;
 
@@ -238,6 +242,8 @@ namespace AutoFix.Application.Services
                 Procesada = cita.Procesada,
                 VehiculoId = cita.VehiculoId,
                 VehiculoPlaca = cita.Vehiculo?.Placa ?? "N/A",
+                ClienteId = cita.Vehiculo?.ClienteId ?? 0,
+                ClienteNombre = cita.Vehiculo?.Cliente?.Nombre ?? "N/A",
                 MecanicoId = cita.MecanicoId,
                 MecanicoNombre = cita.Mecanico?.Nombre ?? "No asignado",
                 FechaRegistro = cita.FechaRegistro,

@@ -1,8 +1,8 @@
 ﻿using AutoFix.Application.DTOs;
 using AutoFix.Application.Interfaces;
 using AutoFix.Application.Common;
-using AutoFix.Entities;
-using AutoFix.infraestructure.Repositories;
+using AutoFix.Domain.Entities;
+using AutoFix.Domain.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -119,7 +119,8 @@ namespace AutoFix.Application.Services
             }
             catch (Exception ex)
             {
-                return Result<RepuestoDTO>.Fail(ResultError.InternalError(ex.Message));
+                var detalle = ex.InnerException?.InnerException?.Message ?? ex.InnerException?.Message ?? ex.Message;
+                return Result<RepuestoDTO>.Fail(ResultError.InternalError(detalle));
             }
         }
 

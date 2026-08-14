@@ -1,12 +1,12 @@
-@model AutoFix.Entities.Vehiculo
+@model AutoFix.Application.DTOs.VehiculoDTO
 @using System.Linq
 @{
     ViewBag.Title = "Expediente del Vehículo";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var historial = ViewBag.Historial as System.Collections.Generic.List<AutoFix.Entities.OrdenTrabajo>;
+    var historial = ViewBag.Historial as System.Collections.Generic.List<AutoFix.Application.DTOs.HistorialReparacionDTO>;
     string placaBuscada = ViewBag.PlacaBuscada;
-    var vehiculosCliente = ViewBag.VehiculosCliente as System.Collections.Generic.List<AutoFix.Entities.Vehiculo>;
+    var vehiculosCliente = ViewBag.VehiculosCliente as System.Collections.Generic.List<AutoFix.Application.DTOs.VehiculoDTO>;
 
     Func<string, string> claseBadge = estado =>
     {
@@ -89,7 +89,7 @@
                 </button>
             </div>
             <div class="card-body">
-                <p class="text-muted mb-3">Propietario: <strong>@(Model.Cliente != null ? Model.Cliente.Nombre : "N/A")</strong></p>
+                <p class="text-muted mb-3">Propietario: <strong>@Model.ClienteNombre</strong></p>
 
                 <div class="row text-center mb-4">
                     <div class="col-md-4">
@@ -109,7 +109,7 @@
                             <div class="text-muted small">Última Visita</div>
                             <div class="h5 mb-0">
                                 @(historial != null && historial.Any()
-                                    ? (historial.First().FechaFinalizacion ?? historial.First().FechaAsignacion).ToString("dd/MM/yyyy")
+                                    ? historial.First().Fecha.ToString("dd/MM/yyyy")
                                     : "Sin registros")
                             </div>
                         </div>
@@ -128,27 +128,26 @@
                 {
                     foreach (var orden in historial)
                     {
-                        var estado = string.IsNullOrWhiteSpace(orden.Estado) ? "Pendiente" : orden.Estado;
                         <div class="border rounded p-3 mb-2">
                             <div class="d-flex justify-content-between flex-wrap">
-                                <strong>@(string.IsNullOrWhiteSpace(orden.DescripcionTrabajo) ? "Servicio sin descripción" : orden.DescripcionTrabajo)</strong>
-                                <span class="badge @claseBadge(estado)">@estado</span>
+                                <strong>@(string.IsNullOrWhiteSpace(orden.Descripcion) ? "Servicio sin descripción" : orden.Descripcion)</strong>
+                                <span class="badge @claseBadge(orden.Estado)">@orden.Estado</span>
                             </div>
                             <div class="text-muted small mt-1">
-                                @((orden.FechaFinalizacion ?? orden.FechaAsignacion).ToString("dd/MM/yyyy"))
-                                &nbsp;·&nbsp; Mecánico: @(orden.Mecanico != null ? orden.Mecanico.Nombre : "N/A")
+                                @orden.Fecha.ToString("dd/MM/yyyy")
+                                &nbsp;·&nbsp; Mecánico: @orden.MecanicoNombre
                             </div>
                             @if (!string.IsNullOrWhiteSpace(orden.Diagnostico))
                             {
                                 <div class="mt-2"><strong>Diagnóstico:</strong> @orden.Diagnostico</div>
                             }
-                            @if (orden.MaterialesUsados != null && orden.MaterialesUsados.Any(m => !m.Borrado))
+                            @if (orden.MaterialesUsados != null && orden.MaterialesUsados.Any())
                             {
                                 <div class="mt-2">
                                     <strong>Repuestos utilizados:</strong>
-                                    @foreach (var mat in orden.MaterialesUsados.Where(m => !m.Borrado))
+                                    @foreach (var mat in orden.MaterialesUsados)
                                     {
-                                        <span class="badge badge-light border mr-1">@(mat.Repuesto != null ? mat.Repuesto.Nombre : "N/A") x@mat.Cantidad</span>
+                                        <span class="badge badge-light border mr-1">@mat.RepuestoNombre x@mat.Cantidad</span>
                                     }
                                 </div>
                             }
