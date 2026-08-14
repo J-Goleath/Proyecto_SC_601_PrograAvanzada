@@ -1,10 +1,9 @@
-﻿using AutoFix.Domain.Interfaces.Repositories;
-using AutoFix.Domain.Entities;
-using AutoFix.infraestructure.DBContext;
-using AutoFix.infraestructure.Repositories;
+using AutoFix.Application.DTOs;
+using AutoFix.Application.Interfaces;
+using AutoFix.Application.Validators;
+using FluentValidation.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -13,271 +12,220 @@ namespace AutoFix.Controllers
 {
     public class InventarioController : Controller
     {
-        private readonly AutoFixContext _context;
-        private readonly IRepuestoRepository _repuestoRepository;
-        private readonly IMaterialUsadoRepository _materialUsadoRepository;
+        private readonly IRepuestoService _repuestoService;
+        private readonly IMaterialUsadoService _materialUsadoService;
+        private readonly IOrdenTrabajoService _ordenTrabajoService;
 
-        public InventarioController()
+        public InventarioController(
+            IRepuestoService repuestoService,
+            IMaterialUsadoService materialUsadoService,
+            IOrdenTrabajoService ordenTrabajoService)
         {
-            _context = new AutoFixContext();
-            _repuestoRepository = new RepuestoRepository(_context);
-            _materialUsadoRepository = new MaterialUsadoRepository(_context);
+            _repuestoService = repuestoService;
+            _materialUsadoService = materialUsadoService;
+            _ordenTrabajoService = ordenTrabajoService;
         }
 
-       
         // 1. INDEX - Listar repuestos
-        
         public ActionResult Index()
         {
-            try
+            var resultado = _repuestoService.GetAll();
+            if (!resultado.Success)
             {
-                var repuestos = _repuestoRepository.GetAll()
-                    .Where(r => !r.Borrado)
-                    .OrderBy(r => r.Nombre)
-                    .ToList();
-
-                return View(repuestos);
+                ViewBag.Error = "Error al cargar repuestos: " + resultado.Error;
+                return View(new List<RepuestoDTO>());
             }
-            catch (Exception ex)
-            {
-                ViewBag.Error = "Error al cargar repuestos: " + ex.Message;
-                return View(new List<Repuesto>());
-            }
+            return View(resultado.Value);
         }
 
-        
         // 2. DETAILS - Ver detalles de un repuesto
-       
         public ActionResult Details(int? id)
         {
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var repuesto = _repuestoRepository.GetById(id.Value);
-            if (repuesto == null || repuesto.Borrado)
+            var resultado = _repuestoService.GetById(id.Value);
+            if (!resultado.Success)
                 return HttpNotFound();
 
-            return View(repuesto);
+            return View(resultado.Value);
         }
 
-        
         // 3. CREATE - Crear nuevo repuesto
-        
         public ActionResult Create()
         {
-            return View();
+            return View(new CreateRepuestoDTO());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Nombre,Codigo,Descripcion,Stock,Precio,Categoria,Ubicacion")] Repuesto repuesto)
+        public ActionResult Create(CreateRepuestoDTO dto)
         {
+            var validacion = new CreateRepuestoDTOValidator().Validate(dto);
+            if (!validacion.IsValid)
+            {
+                validacion.AddToModelState(ModelState, null);
+            }
+
             if (ModelState.IsValid)
             {
-                try
+                var resultado = _repuestoService.Create(dto);
+                if (resultado.Success)
                 {
-                    repuesto.FechaRegistro = DateTime.Now;
-                    repuesto.Borrado = false;
-                    _repuestoRepository.Add(repuesto);
                     TempData["Success"] = "Repuesto creado exitosamente";
                     return RedirectToAction("Index");
                 }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "Error al crear repuesto: " + ex.Message);
-                }
+
+                ModelState.AddModelError("", "Error al crear repuesto: " + resultado.Error);
             }
-            return View(repuesto);
+            return View(dto);
         }
 
- 
         // 4. EDIT - Editar repuesto
-      
         public ActionResult Edit(int? id)
         {
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var repuesto = _repuestoRepository.GetById(id.Value);
-            if (repuesto == null || repuesto.Borrado)
+            var resultado = _repuestoService.GetById(id.Value);
+            if (!resultado.Success)
                 return HttpNotFound();
 
-            return View(repuesto);
+            var repuesto = resultado.Value;
+            var dto = new UpdateRepuestoDTO
+            {
+                Id = repuesto.Id,
+                Nombre = repuesto.Nombre,
+                Codigo = repuesto.Codigo,
+                Descripcion = repuesto.Descripcion,
+                Stock = repuesto.Stock,
+                Precio = repuesto.Precio,
+                Categoria = repuesto.Categoria,
+                Ubicacion = repuesto.Ubicacion
+            };
+
+            return View(dto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nombre,Codigo,Descripcion,Stock,Precio,Categoria,Ubicacion,FechaRegistro,Borrado")] Repuesto repuesto)
+        public ActionResult Edit(UpdateRepuestoDTO dto)
         {
+            var validacion = new UpdateRepuestoDTOValidator().Validate(dto);
+            if (!validacion.IsValid)
+            {
+                validacion.AddToModelState(ModelState, null);
+            }
+
             if (ModelState.IsValid)
             {
-                try
+                var resultado = _repuestoService.Update(dto);
+                if (resultado.Success)
                 {
-                    _repuestoRepository.Update(repuesto);
                     TempData["Success"] = "Repuesto actualizado exitosamente";
                     return RedirectToAction("Index");
                 }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "Error al actualizar repuesto: " + ex.Message);
-                }
+
+                ModelState.AddModelError("", "Error al actualizar repuesto: " + resultado.Error);
             }
-            return View(repuesto);
+            return View(dto);
         }
 
-
         // 5. DELETE - Eliminar repuesto
-
         public ActionResult Delete(int? id)
         {
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var repuesto = _repuestoRepository.GetById(id.Value);
-            if (repuesto == null || repuesto.Borrado)
+            var resultado = _repuestoService.GetById(id.Value);
+            if (!resultado.Success)
                 return HttpNotFound();
 
-            return View(repuesto);
+            return View(resultado.Value);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            try
+            var resultado = _repuestoService.Delete(id);
+            if (resultado.Success)
             {
-                var repuesto = _repuestoRepository.GetById(id);
-                if (repuesto != null)
-                {
-                    repuesto.Borrado = true;
-                    _repuestoRepository.Update(repuesto);
-                    TempData["Success"] = "Repuesto eliminado exitosamente";
-                }
+                TempData["Success"] = "Repuesto eliminado exitosamente";
             }
-            catch (Exception ex)
+            else
             {
-                TempData["Error"] = "Error al eliminar repuesto: " + ex.Message;
+                TempData["Error"] = "Error al eliminar repuesto: " + resultado.Error;
             }
 
             return RedirectToAction("Index");
         }
 
-
-        // 6. SOLICITAR MATERIALES 
-
+        // 6. SOLICITAR MATERIALES
         public ActionResult SolicitarMateriales()
         {
-            try
+            var resultadoRepuestos = _repuestoService.GetDisponibles();
+            var repuestos = resultadoRepuestos.Success ? resultadoRepuestos.Value : new List<RepuestoDTO>();
+
+            var resultadoOrdenes = _ordenTrabajoService.GetAll();
+            var ordenes = resultadoOrdenes.Success
+                ? resultadoOrdenes.Value.Where(o => o.Estado != "Completada" && o.Estado != "Finalizada").ToList()
+                : new List<OrdenTrabajoDTO>();
+
+            if (!ordenes.Any())
             {
-                var repuestos = _repuestoRepository.GetAll()
-                    .Where(r => !r.Borrado && r.Stock > 0)
-                    .OrderBy(r => r.Nombre)
-                    .ToList();
-
-                // ? Obtener órdenes de trabajo activas
-                var ordenes = _context.OrdenesTrabajo
-                    .Where(o => !o.Borrado && o.Estado != "Completada")
-                    .ToList();
-
-                // ? Si no hay órdenes, mostrar mensaje
-                if (!ordenes.Any())
-                {
-                    ViewBag.Mensaje = "No hay órdenes de trabajo activas disponibles.";
-                    ViewBag.OrdenesTrabajo = new List<SelectListItem>();
-                }
-                else
-                {
-                    ViewBag.OrdenesTrabajo = ordenes.Select(o => new SelectListItem
-                    {
-                        Value = o.Id.ToString(),
-                        Text = $"OT-{o.Id} - {o.Cliente?.Nombre ?? "Cliente no disponible"} - {o.Estado}"
-                    }).ToList();
-                }
-
-                return View(repuestos);
+                ViewBag.Mensaje = "No hay órdenes de trabajo activas disponibles.";
+                ViewBag.OrdenesTrabajo = new List<SelectListItem>();
             }
-            catch (Exception ex)
+            else
             {
-                ViewBag.Error = "Error al cargar repuestos: " + ex.Message;
-                return View(new List<Repuesto>());
+                ViewBag.OrdenesTrabajo = ordenes.Select(o => new SelectListItem
+                {
+                    Value = o.Id.ToString(),
+                    Text = $"OT-{o.Id} - {o.ClienteNombre} - {o.Estado}"
+                }).ToList();
             }
+
+            return View(repuestos);
         }
 
         // POST: Inventario/SolicitarMaterial
         [HttpPost]
         public JsonResult SolicitarMaterial(int repuestoId, int cantidad, int ordenTrabajoId, string observaciones = "")
         {
-            try
+            var resultado = _materialUsadoService.SolicitarMaterial(new SolicitarMaterialDTO
             {
-                var repuesto = _repuestoRepository.GetById(repuestoId);
-                if (repuesto == null || repuesto.Borrado)
-                    return Json(new { success = false, message = "Repuesto no encontrado" });
+                RepuestoId = repuestoId,
+                Cantidad = cantidad,
+                OrdenTrabajoId = ordenTrabajoId,
+                Observaciones = observaciones
+            });
 
-                if (repuesto.Stock < cantidad)
-                    return Json(new { success = false, message = $"Stock insuficiente. Disponible: {repuesto.Stock}" });
-
-                var ordenTrabajo = _context.OrdenesTrabajo.Find(ordenTrabajoId);
-                if (ordenTrabajo == null || ordenTrabajo.Borrado)
-                    return Json(new { success = false, message = "Orden de trabajo no encontrada" });
-
-                // Descontar stock
-                repuesto.Stock -= cantidad;
-                _repuestoRepository.Update(repuesto);
-
-                // Registrar el uso
-                var material = new MaterialUsado
-                {
-                    RepuestoId = repuestoId,
-                    OrdenTrabajoId = ordenTrabajoId,
-                    Cantidad = cantidad,
-                    CostoUnitario = repuesto.Precio,
-                    Observaciones = observaciones,
-                    FechaUso = DateTime.Now,
-                    Borrado = false
-                };
-
-                _materialUsadoRepository.Add(material);
-
-                return Json(new
-                {
-                    success = true,
-                    message = $"Material solicitado correctamente. Stock restante: {repuesto.Stock}"
-                });
-            }
-            catch (Exception ex)
+            if (!resultado.Success)
             {
-                return Json(new { success = false, message = "Error: " + ex.Message });
+                return Json(new { success = false, message = resultado.Error });
             }
+
+            var repuestoActualizado = _repuestoService.GetById(repuestoId);
+            var stockRestante = repuestoActualizado.Success ? repuestoActualizado.Value.Stock : 0;
+
+            return Json(new
+            {
+                success = true,
+                message = $"Material solicitado correctamente. Stock restante: {stockRestante}"
+            });
         }
-
 
         // 7. HISTORIAL DE USO
-
         public ActionResult HistorialUso()
         {
-            try
+            var resultado = _materialUsadoService.GetHistorial();
+            if (!resultado.Success)
             {
-                var materiales = _materialUsadoRepository.GetAll()
-                    .Where(m => !m.Borrado)
-                    .OrderByDescending(m => m.FechaUso)
-                    .ToList();
-
-                return View(materiales);
+                ViewBag.Error = "Error al cargar historial: " + resultado.Error;
+                return View(new List<MaterialUsadoHistorialDTO>());
             }
-            catch (Exception ex)
-            {
-                ViewBag.Error = "Error al cargar historial: " + ex.Message;
-                return View(new List<MaterialUsado>());
-            }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-                _context.Dispose();
-            base.Dispose(disposing);
+            return View(resultado.Value);
         }
     }
 }
-
-

@@ -1,10 +1,9 @@
-﻿using AutoFix.Domain.Interfaces.Repositories;
-using AutoFix.Domain.Entities;
+using AutoFix.Application.DTOs;
+using AutoFix.Application.Interfaces;
+using AutoFix.Application.Validators;
 using AutoFix.Filters;
-using AutoFix.infraestructure.DBContext;
-using AutoFix.infraestructure.Repositories;
+using FluentValidation.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -14,17 +13,18 @@ namespace AutoFix.Controllers
     [CustomAuthorize(Roles = "Cliente")]
     public class CitasController : Controller
     {
-        private readonly ICitaSolicitudRepository _citaRepository;
-        private readonly IVehiculoRepository _vehiculoRepository;
-        private readonly INotificacionRepository _notificacionRepository;
-        private readonly AutoFixContext _context;
+        private readonly ICitaService _citaService;
+        private readonly IVehiculoService _vehiculoService;
+        private readonly INotificacionService _notificacionService;
 
-        public CitasController()
+        public CitasController(
+            ICitaService citaService,
+            IVehiculoService vehiculoService,
+            INotificacionService notificacionService)
         {
-            _context = new AutoFixContext();
-            _citaRepository = new CitaSolicitudRepository(_context);
-            _vehiculoRepository = new VehiculoRepository(_context);
-            _notificacionRepository = new NotificacionRepository(_context);
+            _citaService = citaService;
+            _vehiculoService = vehiculoService;
+            _notificacionService = notificacionService;
         }
 
         private int ClienteId
@@ -35,183 +35,200 @@ namespace AutoFix.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var citas = _citaRepository.GetCitasByCliente(ClienteId);
-            return View(citas);
+            var resultado = _citaService.GetByCliente(ClienteId);
+            if (!resultado.Success)
+            {
+                TempData["MensajeError"] = resultado.Error;
+                return View(Enumerable.Empty<CitaDTO>());
+            }
+            return View(resultado.Value);
         }
 
         [HttpGet]
         public ActionResult Create()
         {
             CargarVehiculosEnViewBag();
-            return View(new CitaSolicitud());
+            return View(new CreateCitaDTO());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CitaSolicitud cita)
+        public ActionResult Create(CreateCitaDTO dto)
         {
-            ModelState.Remove("Procesada");
-            ModelState.Remove("MecanicoId");
-            ModelState.Remove("Mecanico");
-            ModelState.Remove("Vehiculo");
+            var validacion = new CreateCitaDTOValidator().Validate(dto);
+            if (!validacion.IsValid)
+            {
+                validacion.AddToModelState(ModelState, null);
+            }
 
             if (ModelState.IsValid)
             {
-                if (!VehiculoPerteneceAlCliente(cita.VehiculoId))
+                if (!VehiculoPerteneceAlCliente(dto.VehiculoId))
                 {
-                    ModelState.AddModelError("VehiculoId", "El vehÃ­culo seleccionado no es vÃ¡lido");
+                    ModelState.AddModelError("VehiculoId", "El vehículo seleccionado no es válido");
                     CargarVehiculosEnViewBag();
-                    return View(cita);
+                    return View(dto);
                 }
 
-                cita.FechaRegistro = DateTime.Now;
-                cita.Procesada = false;
-                cita.MecanicoId = null;
-
-                _citaRepository.Add(cita);
-
-                var notificacion = new Notificacion
+                var resultado = _citaService.Create(dto);
+                if (resultado.Success)
                 {
-                    ClienteId = ClienteId,
-                    Mensaje = "Su cita para el " + cita.Fecha.ToString("dd/MM/yyyy") + " a las " + cita.Hora.ToString(@"hh\:mm") + " fue registrada correctamente.",
-                    FechaEnvio = DateTime.Now,
-                    Leida = false
-                };
-                _notificacionRepository.Add(notificacion);
+                    var cita = resultado.Value;
+                    _notificacionService.Create(new CreateNotificacionDTO
+                    {
+                        ClienteId = ClienteId,
+                        Mensaje = "Su cita para el " + cita.Fecha.ToString("dd/MM/yyyy") + " a las " + cita.Hora.ToString(@"hh\:mm") + " fue registrada correctamente."
+                    });
 
-                TempData["MensajeExito"] = "Cita solicitada correctamente";
-                return RedirectToAction(nameof(Index));
+                    TempData["MensajeExito"] = "Cita solicitada correctamente";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                ModelState.AddModelError("", resultado.Error);
             }
 
             CargarVehiculosEnViewBag();
-            return View(cita);
+            return View(dto);
         }
 
         [HttpGet]
         public ActionResult Details(int id)
         {
-            var cita = _citaRepository.GetById(id);
-            if (cita == null || cita.Borrado || !VehiculoPerteneceAlCliente(cita.VehiculoId))
+            var resultado = _citaService.GetById(id);
+            if (!resultado.Success || !VehiculoPerteneceAlCliente(resultado.Value.VehiculoId))
             {
                 TempData["MensajeError"] = "La cita no existe";
                 return RedirectToAction(nameof(Index));
             }
-            return View(cita);
+            return View(resultado.Value);
         }
 
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var cita = _citaRepository.GetById(id);
-            if (cita == null || cita.Borrado || !VehiculoPerteneceAlCliente(cita.VehiculoId))
+            var resultado = _citaService.GetById(id);
+            if (!resultado.Success || !VehiculoPerteneceAlCliente(resultado.Value.VehiculoId))
             {
                 TempData["MensajeError"] = "La cita no existe";
                 return RedirectToAction(nameof(Index));
             }
 
+            var cita = resultado.Value;
             if (cita.Procesada)
             {
                 TempData["MensajeError"] = "No se puede editar una cita que ya fue procesada";
                 return RedirectToAction(nameof(Index));
             }
 
+            var dto = new UpdateCitaDTO
+            {
+                Id = cita.Id,
+                VehiculoId = cita.VehiculoId,
+                Fecha = cita.Fecha,
+                Hora = cita.Hora,
+                DescripcionFallos = cita.DescripcionFallos,
+                Procesada = cita.Procesada,
+                MecanicoId = cita.MecanicoId
+            };
+
             CargarVehiculosEnViewBag();
-            return View(cita);
+            return View(dto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CitaSolicitud cita)
+        public ActionResult Edit(UpdateCitaDTO dto)
         {
-            ModelState.Remove("Procesada");
-            ModelState.Remove("MecanicoId");
-            ModelState.Remove("Mecanico");
-            ModelState.Remove("Vehiculo");
+            var validacion = new UpdateCitaDTOValidator().Validate(dto);
+            if (!validacion.IsValid)
+            {
+                validacion.AddToModelState(ModelState, null);
+            }
 
             if (ModelState.IsValid)
             {
-                var citaExistente = _citaRepository.GetById(cita.Id);
-                if (citaExistente == null || !VehiculoPerteneceAlCliente(citaExistente.VehiculoId))
+                var citaExistente = _citaService.GetById(dto.Id);
+                if (!citaExistente.Success || !VehiculoPerteneceAlCliente(citaExistente.Value.VehiculoId))
                 {
                     TempData["MensajeError"] = "La cita no existe";
                     return RedirectToAction(nameof(Index));
                 }
 
-                if (citaExistente.Procesada)
+                if (citaExistente.Value.Procesada)
                 {
                     TempData["MensajeError"] = "No se puede editar una cita que ya fue procesada";
                     return RedirectToAction(nameof(Index));
                 }
 
-                if (!VehiculoPerteneceAlCliente(cita.VehiculoId))
+                if (!VehiculoPerteneceAlCliente(dto.VehiculoId))
                 {
-                    ModelState.AddModelError("VehiculoId", "El vehÃ­culo seleccionado no es vÃ¡lido");
+                    ModelState.AddModelError("VehiculoId", "El vehículo seleccionado no es válido");
                     CargarVehiculosEnViewBag();
-                    return View(cita);
+                    return View(dto);
                 }
 
-                citaExistente.Fecha = cita.Fecha;
-                citaExistente.Hora = cita.Hora;
-                citaExistente.DescripcionFallos = cita.DescripcionFallos;
-                citaExistente.VehiculoId = cita.VehiculoId;
+                // Se conserva el estado "Procesada" original (el cliente no debe poder marcarla como procesada)
+                dto.Procesada = citaExistente.Value.Procesada;
 
-                _citaRepository.Update(citaExistente);
-                TempData["MensajeExito"] = "Cita actualizada correctamente";
-                return RedirectToAction(nameof(Index));
+                var resultado = _citaService.Update(dto);
+                if (resultado.Success)
+                {
+                    TempData["MensajeExito"] = "Cita actualizada correctamente";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                ModelState.AddModelError("", resultado.Error);
             }
 
             CargarVehiculosEnViewBag();
-            return View(cita);
+            return View(dto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var cita = _citaRepository.GetById(id);
-            if (cita != null && !cita.Borrado && VehiculoPerteneceAlCliente(cita.VehiculoId))
+            var resultado = _citaService.GetById(id);
+            if (!resultado.Success || !VehiculoPerteneceAlCliente(resultado.Value.VehiculoId))
             {
-                if (cita.Procesada)
-                {
-                    TempData["MensajeError"] = "No se puede cancelar una cita que ya fue procesada";
-                    return RedirectToAction(nameof(Index));
-                }
-
-                cita.Borrado = true;
-                _citaRepository.Update(cita);
-                TempData["MensajeExito"] = "Cita cancelada correctamente";
+                TempData["MensajeError"] = "La cita no existe";
                 return RedirectToAction(nameof(Index));
             }
 
-            TempData["MensajeError"] = "La cita no existe";
+            if (resultado.Value.Procesada)
+            {
+                TempData["MensajeError"] = "No se puede cancelar una cita que ya fue procesada";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var eliminado = _citaService.Delete(id);
+            if (eliminado.Success)
+            {
+                TempData["MensajeExito"] = "Cita cancelada correctamente";
+            }
+            else
+            {
+                TempData["MensajeError"] = eliminado.Error;
+            }
             return RedirectToAction(nameof(Index));
         }
 
         private bool VehiculoPerteneceAlCliente(int vehiculoId)
         {
-            var vehiculo = _vehiculoRepository.GetById(vehiculoId);
-            return vehiculo != null && !vehiculo.Borrado && vehiculo.ClienteId == ClienteId;
+            var resultado = _vehiculoService.GetById(vehiculoId);
+            return resultado.Success && resultado.Value.ClienteId == ClienteId;
         }
 
         private void CargarVehiculosEnViewBag()
         {
-            var vehiculos = _vehiculoRepository.GetVehiculosByCliente(ClienteId);
+            var resultado = _vehiculoService.GetByCliente(ClienteId);
+            var vehiculos = resultado.Success ? resultado.Value : new System.Collections.Generic.List<VehiculoDTO>();
+
             ViewBag.Vehiculos = vehiculos.Select(v => new SelectListItem
             {
                 Value = v.Id.ToString(),
                 Text = v.Placa + " - " + v.Marca + " " + v.Modelo
             }).ToList();
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }
-
-

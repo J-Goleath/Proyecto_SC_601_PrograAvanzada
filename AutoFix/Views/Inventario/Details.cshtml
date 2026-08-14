@@ -1,4 +1,4 @@
-@model AutoFix.Entities.Repuesto
+@model AutoFix.Application.DTOs.RepuestoDTO
 
 @{
     ViewBag.Title = "Detalles del Repuesto";
@@ -12,13 +12,13 @@
         <div class="card-body">
             <dl class="row">
                 <dt class="col-sm-3">Codigo</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Codigo)</dd>
+                <dd class="col-sm-9">@Model.Codigo</dd>
 
                 <dt class="col-sm-3">Nombre</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Nombre)</dd>
+                <dd class="col-sm-9">@Model.Nombre</dd>
 
                 <dt class="col-sm-3">Categoria</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Categoria)</dd>
+                <dd class="col-sm-9">@Model.Categoria</dd>
 
                 <dt class="col-sm-3">Stock</dt>
                 <dd class="col-sm-9">
@@ -40,13 +40,13 @@
                 <dd class="col-sm-9">@String.Format("{0:C}", Model.Precio)</dd>
 
                 <dt class="col-sm-3">Ubicacion</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Ubicacion)</dd>
+                <dd class="col-sm-9">@Model.Ubicacion</dd>
 
                 <dt class="col-sm-3">Descripcion</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Descripcion)</dd>
+                <dd class="col-sm-9">@Model.Descripcion</dd>
 
                 <dt class="col-sm-3">Fecha Registro</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.FechaRegistro)</dd>
+                <dd class="col-sm-9">@Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</dd>
             </dl>
         </div>
     </div>

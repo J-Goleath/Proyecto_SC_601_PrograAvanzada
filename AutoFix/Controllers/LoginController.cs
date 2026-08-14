@@ -1,8 +1,5 @@
-﻿using AutoFix.Domain.Interfaces.Repositories;
-using AutoFix.Domain.Entities;
-using AutoFix.infraestructure.DBContext;
-using AutoFix.infraestructure.Repositories;
-using AutoFix.Utils;
+using AutoFix.Application.DTOs;
+using AutoFix.Application.Interfaces;
 using System;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -11,13 +8,11 @@ namespace AutoFix.Controllers
 {
     public class LoginController : Controller
     {
-        private readonly IClienteRepository _clienteRepository;
-        private readonly AutoFixContext _context;
+        private readonly IClienteService _clienteService;
 
-        public LoginController()
+        public LoginController(IClienteService clienteService)
         {
-            _context = new AutoFixContext();
-            _clienteRepository = new ClienteRepository(_context);
+            _clienteService = clienteService;
         }
 
         [HttpGet]
@@ -40,24 +35,28 @@ namespace AutoFix.Controllers
                 return View();
             }
 
-            var cliente = _clienteRepository.Login(correo, contraseña);
-
-            if (cliente != null)
+            var resultado = _clienteService.Login(new LoginDTO
             {
-                
+                Correo = correo,
+                Contraseña = contraseña
+            });
+
+            if (resultado.Success)
+            {
+                var cliente = resultado.Value;
+
                 Session["UsuarioId"] = cliente.Id;
                 Session["UsuarioNombre"] = cliente.Nombre;
-                Session["UsuarioRol"] = cliente.Rol.ToString();
+                Session["UsuarioRol"] = cliente.Rol;
 
-                // ? CREAR TICKET DE AUTENTICACIÓN CON ROL
-                var roles = cliente.Rol.ToString(); // "Administrador", "Mecanico", "Cliente"
+                // ✅ CREAR TICKET DE AUTENTICACIÓN CON ROL
                 var authTicket = new FormsAuthenticationTicket(
                     1,
                     cliente.Correo,
                     DateTime.Now,
                     DateTime.Now.AddMinutes(120),
                     false,
-                    roles
+                    cliente.Rol
                 );
 
                 var encryptedTicket = FormsAuthentication.Encrypt(authTicket);
@@ -85,5 +84,3 @@ namespace AutoFix.Controllers
         }
     }
 }
-
-

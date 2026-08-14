@@ -1,4 +1,4 @@
-@model IEnumerable<AutoFix.Entities.Repuesto>
+@model IEnumerable<AutoFix.Application.DTOs.RepuestoDTO>
 
 @{
     ViewBag.Title = "Inventario de Repuestos";
@@ -37,9 +37,9 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Codigo)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Categoria)</td>
+                        <td>@item.Codigo</td>
+                        <td>@item.Nombre</td>
+                        <td>@item.Categoria</td>
                         <td>
                             @if (item.Stock <= 5)
                             {
@@ -55,7 +55,7 @@
                             }
                         </td>
                         <td>@String.Format("{0:C}", item.Precio)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Ubicacion)</td>
+                        <td>@item.Ubicacion</td>
                         <td>
                             @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-warning" })
                             @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-info" })

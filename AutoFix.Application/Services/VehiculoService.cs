@@ -1,8 +1,8 @@
 ﻿using AutoFix.Application.DTOs;
 using AutoFix.Application.Interfaces;
 using AutoFix.Application.Common;
-using AutoFix.Entities;
-using AutoFix.infraestructure.Repositories;
+using AutoFix.Domain.Entities;
+using AutoFix.Domain.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

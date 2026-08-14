@@ -1,4 +1,4 @@
-﻿@model AutoFix.Entities.OrdenTrabajo
+@model AutoFix.Application.DTOs.OrdenTrabajoDTO
 
 @{
     ViewBag.Title = "Actualizar Estado de Orden";
@@ -22,9 +22,9 @@
 
                 <dt class="col-sm-3">Cliente</dt>
                 <dd class="col-sm-9">
-                    @if (Model.Cliente != null)
+                    @if (Model.ClienteNombre != "N/A")
                     {
-                        @Model.Cliente.Nombre
+                        @Model.ClienteNombre
                     }
                     else
                     {
@@ -34,9 +34,9 @@
 
                 <dt class="col-sm-3">Mecánico</dt>
                 <dd class="col-sm-9">
-                    @if (Model.Mecanico != null)
+                    @if (Model.MecanicoNombre != "N/A")
                     {
-                        @Model.Mecanico.Nombre
+                        @Model.MecanicoNombre
                     }
                     else
                     {

@@ -1,4 +1,4 @@
-﻿@model AutoFix.Entities.CitaSolicitud
+@model AutoFix.Application.DTOs.UpdateCitaDTO
 
 @{
     ViewBag.Title = "Editar Cita";
@@ -15,11 +15,12 @@
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(model => model.Id)
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.VehiculoId, "Vehículo", new { @class = "font-weight-bold" })
+                            @Html.LabelFor(model => model.VehiculoId, new { @class = "font-weight-bold" })
                             @Html.DropDownListFor(model => model.VehiculoId, (IEnumerable<SelectListItem>)ViewBag.Vehiculos, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.VehiculoId, "", new { @class = "text-danger" })
                         </div>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AutoFix.Entities.OrdenTrabajo>
+@model IEnumerable<AutoFix.Application.DTOs.OrdenTrabajoDTO>
 
 @{
     ViewBag.Title = "Órdenes de Trabajo";
@@ -22,6 +22,13 @@
                 </div>
             }
 
+            @if (TempData["MensajeError"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["MensajeError"]
+                </div>
+            }
+
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -42,9 +49,9 @@
                             <td>@item.CitaSolicitudId</td>
 
                             <td>
-                                @if (item.Cliente != null)
+                                @if (item.ClienteNombre != "N/A")
                                 {
-                                    @item.Cliente.Nombre
+                                    @item.ClienteNombre
                                 }
                                 else
                                 {
@@ -53,9 +60,9 @@
                             </td>
 
                             <td>
-                                @if (item.Mecanico != null)
+                                @if (item.MecanicoNombre != "N/A")
                                 {
-                                    @item.Mecanico.Nombre
+                                    @item.MecanicoNombre
                                 }
                                 else
                                 {

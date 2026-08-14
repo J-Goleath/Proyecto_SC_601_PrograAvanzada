@@ -1,0 +1,15 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Compilados
+bin/
+obj/
+
+# Paquetes NuGet (formato classic .NET Framework)
+packages/
+
+# Otros
+*.dll
+*.pdb

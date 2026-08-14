@@ -1,4 +1,4 @@
-﻿@model AutoFix.Entities.CitaSolicitud
+@model AutoFix.Application.DTOs.CitaDTO
 
 @{
     ViewBag.Title = "Detalle de Cita";
@@ -13,7 +13,7 @@
         <div class="card-body">
             <dl class="row">
                 <dt class="col-sm-3">Vehículo</dt>
-                <dd class="col-sm-9">@(Model.Vehiculo != null ? Model.Vehiculo.Placa + " - " + Model.Vehiculo.Marca + " " + Model.Vehiculo.Modelo : "N/A")</dd>
+                <dd class="col-sm-9">@Model.VehiculoPlaca</dd>
 
                 <dt class="col-sm-3">Fecha</dt>
                 <dd class="col-sm-9">@Model.Fecha.ToString("dd/MM/yyyy")</dd>
@@ -37,7 +37,7 @@
                 </dd>
 
                 <dt class="col-sm-3">Mecánico Asignado</dt>
-                <dd class="col-sm-9">@(Model.Mecanico != null ? Model.Mecanico.Nombre : "Sin asignar")</dd>
+                <dd class="col-sm-9">@Model.MecanicoNombre</dd>
 
                 <dt class="col-sm-3">Fecha de Solicitud</dt>
                 <dd class="col-sm-9">@Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</dd>

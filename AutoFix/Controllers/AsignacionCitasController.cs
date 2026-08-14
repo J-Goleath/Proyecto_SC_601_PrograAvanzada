@@ -1,9 +1,6 @@
-﻿using AutoFix.Domain.Interfaces.Repositories;
-using AutoFix.Domain.Entities;
+using AutoFix.Application.DTOs;
+using AutoFix.Application.Interfaces;
 using AutoFix.Filters;
-using AutoFix.infraestructure.DBContext;
-using AutoFix.infraestructure.Repositories;
-using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -13,31 +10,35 @@ namespace AutoFix.Controllers
     [CustomAuthorize(Roles = "Administrador")]
     public class AsignacionCitasController : Controller
     {
-        private readonly ICitaSolicitudRepository _citaRepository;
-        private readonly IClienteRepository _clienteRepository;
-        private readonly INotificacionRepository _notificacionRepository;
-        private readonly AutoFixContext _context;
+        private readonly ICitaService _citaService;
+        private readonly IClienteService _clienteService;
+        private readonly IVehiculoService _vehiculoService;
+        private readonly INotificacionService _notificacionService;
 
-        public AsignacionCitasController()
+        public AsignacionCitasController(
+            ICitaService citaService,
+            IClienteService clienteService,
+            IVehiculoService vehiculoService,
+            INotificacionService notificacionService)
         {
-            _context = new AutoFixContext();
-            _citaRepository = new CitaSolicitudRepository(_context);
-            _clienteRepository = new ClienteRepository(_context);
-            _notificacionRepository = new NotificacionRepository(_context);
+            _citaService = citaService;
+            _clienteService = clienteService;
+            _vehiculoService = vehiculoService;
+            _notificacionService = notificacionService;
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            var citas = _citaRepository.GetAll()
-                .Where(c => !c.Borrado)
-                .OrderBy(c => c.Procesada)
-                .ThenBy(c => c.Fecha)
-                .ToList();
+            var resultadoCitas = _citaService.GetAll();
+            var citas = resultadoCitas.Success
+                ? resultadoCitas.Value.OrderBy(c => c.Procesada).ThenBy(c => c.Fecha).ToList()
+                : new System.Collections.Generic.List<CitaDTO>();
 
-            var mecanicos = _clienteRepository.GetClientesActivos()
-                .Where(c => c.Rol == RolUsuario.Mecanico)
-                .ToList();
+            var resultadoClientes = _clienteService.GetAll();
+            var mecanicos = resultadoClientes.Success
+                ? resultadoClientes.Value.Where(c => c.Rol == "Mecanico").ToList()
+                : new System.Collections.Generic.List<ClienteDTO>();
 
             ViewBag.Mecanicos = mecanicos;
 
@@ -48,37 +49,49 @@ namespace AutoFix.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AsignarMecanico(int citaId, int mecanicoId)
         {
-            var cita = _citaRepository.GetById(citaId);
-            if (cita == null || cita.Borrado)
+            var resultadoCita = _citaService.GetById(citaId);
+            if (!resultadoCita.Success)
             {
                 TempData["MensajeError"] = "La cita no existe";
                 return RedirectToAction(nameof(Index));
             }
 
-            var mecanico = _clienteRepository.GetById(mecanicoId);
-            if (mecanico == null || mecanico.Rol != RolUsuario.Mecanico)
+            var resultadoMecanico = _clienteService.GetById(mecanicoId);
+            if (!resultadoMecanico.Success || resultadoMecanico.Value.Rol != "Mecanico")
             {
-                TempData["MensajeError"] = "El mecÃ¡nico seleccionado no es vÃ¡lido";
+                TempData["MensajeError"] = "El mecánico seleccionado no es válido";
                 return RedirectToAction(nameof(Index));
             }
 
-            cita.MecanicoId = mecanicoId;
-            cita.Procesada = true;
-            _citaRepository.Update(cita);
-
-            if (cita.Vehiculo != null)
+            var cita = resultadoCita.Value;
+            var dto = new UpdateCitaDTO
             {
-                var notificacion = new Notificacion
-                {
-                    ClienteId = cita.Vehiculo.ClienteId,
-                    Mensaje = "Se le asignÃ³ el mecÃ¡nico " + mecanico.Nombre + " para su cita del " + cita.Fecha.ToString("dd/MM/yyyy") + ".",
-                    FechaEnvio = DateTime.Now,
-                    Leida = false
-                };
-                _notificacionRepository.Add(notificacion);
+                Id = cita.Id,
+                VehiculoId = cita.VehiculoId,
+                Fecha = cita.Fecha,
+                Hora = cita.Hora,
+                DescripcionFallos = cita.DescripcionFallos,
+                Procesada = true,
+                MecanicoId = mecanicoId
+            };
+
+            var resultadoUpdate = _citaService.Update(dto);
+            if (!resultadoUpdate.Success)
+            {
+                TempData["MensajeError"] = resultadoUpdate.Error;
+                return RedirectToAction(nameof(Index));
             }
 
-            TempData["MensajeExito"] = "MecÃ¡nico asignado correctamente";
+            if (cita.ClienteId != 0)
+            {
+                _notificacionService.Create(new CreateNotificacionDTO
+                {
+                    ClienteId = cita.ClienteId,
+                    Mensaje = "Se le asignó el mecánico " + resultadoMecanico.Value.Nombre + " para su cita del " + cita.Fecha.ToString("dd/MM/yyyy") + "."
+                });
+            }
+
+            TempData["MensajeExito"] = "Mecánico asignado correctamente";
             return RedirectToAction(nameof(Index));
         }
 
@@ -86,31 +99,36 @@ namespace AutoFix.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult QuitarAsignacion(int citaId)
         {
-            var cita = _citaRepository.GetById(citaId);
-            if (cita != null && !cita.Borrado)
+            var resultadoCita = _citaService.GetById(citaId);
+            if (!resultadoCita.Success)
             {
-                cita.MecanicoId = null;
-                cita.Procesada = false;
-                _citaRepository.Update(cita);
-                TempData["MensajeExito"] = "AsignaciÃ³n removida";
+                TempData["MensajeError"] = "La cita no existe";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var cita = resultadoCita.Value;
+            var dto = new UpdateCitaDTO
+            {
+                Id = cita.Id,
+                VehiculoId = cita.VehiculoId,
+                Fecha = cita.Fecha,
+                Hora = cita.Hora,
+                DescripcionFallos = cita.DescripcionFallos,
+                Procesada = false,
+                MecanicoId = null
+            };
+
+            var resultado = _citaService.Update(dto);
+            if (resultado.Success)
+            {
+                TempData["MensajeExito"] = "Asignación removida";
             }
             else
             {
-                TempData["MensajeError"] = "La cita no existe";
+                TempData["MensajeError"] = resultado.Error;
             }
 
             return RedirectToAction(nameof(Index));
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }
-
-

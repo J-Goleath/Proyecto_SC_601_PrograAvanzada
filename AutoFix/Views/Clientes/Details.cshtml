@@ -1,8 +1,9 @@
-﻿@model AutoFix.Entities.Cliente
+﻿@model AutoFix.Application.DTOs.ClienteDTO
 
 @{
     ViewBag.Title = "Detalles del Cliente";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var vehiculos = ViewBag.Vehiculos as System.Collections.Generic.List<AutoFix.Application.DTOs.VehiculoDTO>;
 }
 
 <div class="container mt-4">
@@ -31,7 +32,7 @@
                 <dd class="col-sm-9">@Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</dd>
             </dl>
 
-            @if (Model.Vehiculos != null && Model.Vehiculos.Any(v => !v.Borrado))
+            @if (vehiculos != null && vehiculos.Any())
             {
                 <hr />
                 <h5>Vehículos del Cliente</h5>
@@ -45,7 +46,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var vehiculo in Model.Vehiculos.Where(v => !v.Borrado))
+                        @foreach (var vehiculo in vehiculos)
                         {
                             <tr>
                                 <td>@vehiculo.Placa</td>

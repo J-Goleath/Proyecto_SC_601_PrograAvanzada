@@ -1,9 +1,9 @@
-﻿@model IEnumerable<AutoFix.Entities.CitaSolicitud>
+@model IEnumerable<AutoFix.Application.DTOs.CitaDTO>
 
 @{
     ViewBag.Title = "Asignación de Citas";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var mecanicos = ViewBag.Mecanicos as List<AutoFix.Entities.Cliente>;
+    var mecanicos = ViewBag.Mecanicos as List<AutoFix.Application.DTOs.ClienteDTO>;
 }
 
 <div class="container mt-4">
@@ -51,8 +51,8 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@(item.Vehiculo != null && item.Vehiculo.Cliente != null ? item.Vehiculo.Cliente.Nombre : "N/A")</td>
-                            <td>@(item.Vehiculo != null ? item.Vehiculo.Placa + " - " + item.Vehiculo.Marca : "N/A")</td>
+                            <td>@item.ClienteNombre</td>
+                            <td>@item.VehiculoPlaca</td>
                             <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
                             <td>@item.Hora.ToString(@"hh\:mm")</td>
                             <td>@item.DescripcionFallos</td>
@@ -67,9 +67,9 @@
                                 }
                             </td>
                             <td>
-                                @if (item.Procesada && item.Mecanico != null)
+                                @if (item.Procesada && item.MecanicoId.HasValue)
                                 {
-                                    @item.Mecanico.Nombre
+                                    @item.MecanicoNombre
                                 }
                                 else
                                 {

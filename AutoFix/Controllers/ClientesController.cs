@@ -1,9 +1,9 @@
-﻿using AutoFix.Domain.Interfaces.Repositories;
+using AutoFix.Application.DTOs;
+using AutoFix.Application.Interfaces;
+using AutoFix.Application.Validators;
 using AutoFix.Domain.Entities;
 using AutoFix.Filters;
-using AutoFix.infraestructure.DBContext;
-using AutoFix.infraestructure.Repositories;
-using AutoFix.Utils;
+using FluentValidation.Mvc;
 using System;
 using System.Linq;
 using System.Web.Mvc;
@@ -11,185 +11,178 @@ using System.Web.Mvc;
 namespace AutoFix.Controllers
 {
     [RoutePrefix("Clientes")]
-    [CustomAuthorize(Roles = "Administrador")]  
+    [CustomAuthorize(Roles = "Administrador")]
     public class ClientesController : Controller
     {
-        private readonly IClienteRepository _clienteRepository;
-        private readonly AutoFixContext _context;
+        private readonly IClienteService _clienteService;
+        private readonly IVehiculoService _vehiculoService;
 
-        public ClientesController()
+        public ClientesController(IClienteService clienteService, IVehiculoService vehiculoService)
         {
-            _context = new AutoFixContext();
-            _clienteRepository = new ClienteRepository(_context);
+            _clienteService = clienteService;
+            _vehiculoService = vehiculoService;
         }
 
-        // ? PROTEGIDO - Solo Administradores
+        // ✅ PROTEGIDO - Solo Administradores
         [HttpGet]
         public ActionResult Index()
         {
-            var clientes = _clienteRepository.GetAll();
-            return View(clientes);
+            var resultado = _clienteService.GetAll();
+            if (!resultado.Success)
+            {
+                TempData["MensajeError"] = resultado.Error;
+                return View(Enumerable.Empty<ClienteDTO>());
+            }
+            return View(resultado.Value);
         }
 
-        // ? PÚBLICO - Registro de clientes (SIN AUTENTICACIÓN)
+        // ✅ PÚBLICO - Registro de clientes (SIN AUTENTICACIÓN)
         [HttpGet]
         [AllowAnonymous]
         public ActionResult Create()
         {
             CargarRoles();
-            return View(new Cliente());
+            return View(new CreateClienteDTO());
         }
 
-        // ? PÚBLICO - Registro de clientes (SIN AUTENTICACIÓN)
+        // ✅ PÚBLICO - Registro de clientes (SIN AUTENTICACIÓN)
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public ActionResult Create(Cliente cliente)
+        public ActionResult Create(CreateClienteDTO dto)
         {
-            System.Diagnostics.Debug.WriteLine("=== CREATE CLIENTE ===");
-            System.Diagnostics.Debug.WriteLine($"Nombre: {cliente.Nombre}");
-            System.Diagnostics.Debug.WriteLine($"Correo: {cliente.Correo}");
-            System.Diagnostics.Debug.WriteLine($"Rol: {cliente.Rol}");
-            System.Diagnostics.Debug.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
+            var validacion = new CreateClienteDTOValidator().Validate(dto);
+            if (!validacion.IsValid)
+            {
+                validacion.AddToModelState(ModelState, null);
+            }
 
             if (ModelState.IsValid)
             {
-                if (_clienteRepository.ExisteCorreo(cliente.Correo))
+                var resultado = _clienteService.Create(dto);
+                if (resultado.Success)
                 {
-                    ModelState.AddModelError("Correo", "Ya existe un cliente con este correo");
-                    CargarRoles(cliente.Rol);
-                    return View(cliente);
+                    TempData["MensajeExito"] = "¡Registro exitoso! Ahora puede iniciar sesión.";
+                    return RedirectToAction("Index", "Login");
                 }
 
-                cliente.Contraseña = PasswordHelper.Encriptar(cliente.Contraseña);
-                cliente.FechaRegistro = DateTime.Now;
-
-                _clienteRepository.Add(cliente);
-                TempData["MensajeExito"] = "¡Registro exitoso! Ahora puede iniciar sesión.";
-                return RedirectToAction("Index", "Login");
+                ModelState.AddModelError("Correo", resultado.Error);
             }
 
-            CargarRoles(cliente.Rol);
-            return View(cliente);
+            CargarRoles(dto.Rol);
+            return View(dto);
         }
 
-        // ? PROTEGIDO - Solo Administradores
+        // ✅ PROTEGIDO - Solo Administradores
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var cliente = _clienteRepository.GetById(id);
-            if (cliente == null || cliente.Borrado)
+            var resultado = _clienteService.GetById(id);
+            if (!resultado.Success)
             {
-                TempData["MensajeError"] = "El cliente no existe";
+                TempData["MensajeError"] = resultado.Error;
                 return RedirectToAction(nameof(Index));
             }
 
+            var cliente = resultado.Value;
+            var dto = new UpdateClienteDTO
+            {
+                Id = cliente.Id,
+                Nombre = cliente.Nombre,
+                Correo = cliente.Correo,
+                Telefono = cliente.Telefono,
+                Rol = cliente.Rol
+            };
+
             CargarRoles(cliente.Rol);
-            return View(cliente);
+            return View(dto);
         }
 
-        // ? PROTEGIDO - Solo Administradores
+        // ✅ PROTEGIDO - Solo Administradores
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Cliente cliente)
+        public ActionResult Edit(UpdateClienteDTO dto)
         {
-            if (string.IsNullOrEmpty(cliente.Contraseña))
+            // La contraseña es opcional al editar, así que la quitamos de la
+            // validación del ModelState si vino vacía.
+            if (string.IsNullOrEmpty(dto.Contraseña))
             {
-                var clienteExistente = _clienteRepository.GetById(cliente.Id);
-                if (clienteExistente == null)
+                ModelState.Remove(nameof(dto.Contraseña));
+            }
+
+            var validacion = new UpdateClienteDTOValidator().Validate(dto);
+            if (!validacion.IsValid)
+            {
+                validacion.AddToModelState(ModelState, null);
+            }
+
+            if (ModelState.IsValid)
+            {
+                var resultado = _clienteService.Update(dto);
+                if (resultado.Success)
                 {
-                    TempData["MensajeError"] = "El cliente no existe";
+                    TempData["MensajeExito"] = "Cliente actualizado correctamente";
                     return RedirectToAction(nameof(Index));
                 }
 
-                var correoDuplicado = _clienteRepository.ExisteCorreo(cliente.Correo);
-                if (correoDuplicado && clienteExistente.Correo != cliente.Correo)
-                {
-                    ModelState.AddModelError("Correo", "Ya existe otro cliente con este correo");
-                    CargarRoles(cliente.Rol);
-                    return View(cliente);
-                }
-
-                if (!string.IsNullOrEmpty(cliente.Contraseña) && cliente.Contraseña != clienteExistente.Contraseña)
-                {
-                    cliente.Contraseña = PasswordHelper.Encriptar(cliente.Contraseña);
-                }
-                else
-                {
-                    cliente.Contraseña = clienteExistente.Contraseña;
-                }
-
-                cliente.FechaRegistro = clienteExistente.FechaRegistro;
-                cliente.Borrado = clienteExistente.Borrado;
-
-                _clienteRepository.Update(cliente);
-                TempData["MensajeExito"] = "Cliente actualizado correctamente";
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("Correo", resultado.Error);
             }
 
-            CargarRoles(cliente.Rol);
-            return View(cliente);
+            CargarRoles(dto.Rol);
+            return View(dto);
         }
 
-        // ? PROTEGIDO - Solo Administradores
+        // ✅ PROTEGIDO - Solo Administradores
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var cliente = _clienteRepository.GetById(id);
-            if (cliente != null && !cliente.Borrado)
+            var vehiculosResultado = _vehiculoService.GetByCliente(id);
+            if (vehiculosResultado.Success && vehiculosResultado.Value.Any())
             {
-                var tieneVehiculos = _context.Vehiculos.Any(v => v.ClienteId == id && !v.Borrado);
-                if (tieneVehiculos)
-                {
-                    TempData["MensajeError"] = "No se puede eliminar el cliente porque tiene vehículos asociados";
-                    return RedirectToAction(nameof(Index));
-                }
-
-                cliente.Borrado = true;
-                _clienteRepository.Update(cliente);
-                TempData["MensajeExito"] = "Cliente eliminado correctamente";
+                TempData["MensajeError"] = "No se puede eliminar el cliente porque tiene vehículos asociados";
                 return RedirectToAction(nameof(Index));
             }
 
-            TempData["MensajeError"] = "El cliente no existe";
+            var resultado = _clienteService.Delete(id);
+            if (resultado.Success)
+            {
+                TempData["MensajeExito"] = "Cliente eliminado correctamente";
+            }
+            else
+            {
+                TempData["MensajeError"] = resultado.Error;
+            }
             return RedirectToAction(nameof(Index));
         }
 
-        // ? PROTEGIDO - Solo Administradores
+        // ✅ PROTEGIDO - Solo Administradores
         [HttpGet]
         public ActionResult Details(int id)
         {
-            var cliente = _clienteRepository.GetById(id);
-            if (cliente == null || cliente.Borrado)
+            var resultado = _clienteService.GetById(id);
+            if (!resultado.Success)
             {
-                TempData["MensajeError"] = "El cliente no existe";
+                TempData["MensajeError"] = resultado.Error;
                 return RedirectToAction(nameof(Index));
             }
-            return View(cliente);
+
+            var vehiculosResultado = _vehiculoService.GetByCliente(id);
+            ViewBag.Vehiculos = vehiculosResultado.Success ? vehiculosResultado.Value : new System.Collections.Generic.List<VehiculoDTO>();
+
+            return View(resultado.Value);
         }
 
-        private void CargarRoles(RolUsuario? rolSeleccionado = null)
+        private void CargarRoles(string rolSeleccionado = null)
         {
             ViewBag.Roles = new SelectList(
                 Enum.GetValues(typeof(RolUsuario))
                     .Cast<RolUsuario>()
-                    .Select(r => new { Id = (int)r, Nombre = r.ToString() }),
+                    .Select(r => new { Id = r.ToString(), Nombre = r.ToString() }),
                 "Id",
                 "Nombre",
                 rolSeleccionado
             );
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }
-
-

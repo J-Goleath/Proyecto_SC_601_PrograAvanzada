@@ -1,4 +1,4 @@
-﻿@model AutoFix.Entities.Vehiculo
+﻿@model AutoFix.Application.DTOs.VehiculoDTO
 
 @{
     ViewBag.Title = "Detalles del Vehículo";
@@ -31,7 +31,7 @@
                 <dd class="col-sm-9">@Model.Color</dd>
 
                 <dt class="col-sm-3">Cliente</dt>
-                <dd class="col-sm-9">@(Model.Cliente != null ? Model.Cliente.Nombre : "Sin cliente")</dd>
+                <dd class="col-sm-9">@Model.ClienteNombre</dd>
 
                 <dt class="col-sm-3">Fecha de Registro</dt>
                 <dd class="col-sm-9">@Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</dd>

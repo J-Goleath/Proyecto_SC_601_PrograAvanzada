@@ -1,4 +1,4 @@
-@model IEnumerable<AutoFix.Entities.Repuesto>
+@model IEnumerable<AutoFix.Application.DTOs.RepuestoDTO>
 
 @{
     ViewBag.Title = "Solicitud de Materiales";
@@ -13,6 +13,11 @@
         <i class="fas fa-info-circle"></i>
         <strong>Instrucciones:</strong> Seleccione una orden de trabajo activa, busque los repuestos necesarios y solicite la cantidad requerida.
     </div>
+
+    @if (ViewBag.Mensaje != null)
+    {
+        <div class="alert alert-warning">@ViewBag.Mensaje</div>
+    }
 
     <!-- Selección de Orden de Trabajo -->
     <div class="row mb-4">

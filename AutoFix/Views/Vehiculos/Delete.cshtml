@@ -1,4 +1,4 @@
-﻿@model AutoFix.Entities.Vehiculo
+﻿@model AutoFix.Application.DTOs.VehiculoDTO
 
 @{
     ViewBag.Title = "Eliminar Vehículo";
@@ -27,13 +27,13 @@
                 <dd class="col-sm-9">@Model.Modelo</dd>
 
                 <dt class="col-sm-3">Cliente</dt>
-                <dd class="col-sm-9">@(Model.Cliente != null ? Model.Cliente.Nombre : "Sin cliente")</dd>
+                <dd class="col-sm-9">@Model.ClienteNombre</dd>
             </dl>
 
             @using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
-                @Html.HiddenFor(model => model.Id)
+                @Html.Hidden("id", Model.Id)
 
                 <div class="form-group mt-3">
                     <button type="submit" class="btn btn-danger">Eliminar</button>

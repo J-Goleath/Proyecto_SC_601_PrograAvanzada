@@ -1,27 +1,30 @@
-﻿using AutoFix.Domain.Interfaces.Repositories;
-using AutoFix.Domain.Entities;
+using AutoFix.Application.DTOs;
+using AutoFix.Application.Interfaces;
 using AutoFix.Domain.Enums;
-using AutoFix.infraestructure.Repositories;
 using System;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 
 namespace AutoFix.Controllers
 {
     public class OrdenTrabajoController : Controller
     {
-        private readonly IOrdenTrabajoRepository ordenTrabajoRepository;
+        private readonly IOrdenTrabajoService _ordenTrabajoService;
 
-        public OrdenTrabajoController()
+        public OrdenTrabajoController(IOrdenTrabajoService ordenTrabajoService)
         {
-            ordenTrabajoRepository = new OrdenTrabajoRepository();
+            _ordenTrabajoService = ordenTrabajoService;
         }
 
         public ActionResult Index()
         {
-            var ordenes = ordenTrabajoRepository.ObtenerTodas();
-            return View(ordenes);
+            var resultado = _ordenTrabajoService.GetAll();
+            if (!resultado.Success)
+            {
+                TempData["MensajeError"] = resultado.Error;
+                return View(Enumerable.Empty<OrdenTrabajoDTO>());
+            }
+            return View(resultado.Value);
         }
 
         public ActionResult Detalle(int? id)
@@ -31,14 +34,13 @@ namespace AutoFix.Controllers
                 return RedirectToAction("Index");
             }
 
-            var ordenTrabajo = ordenTrabajoRepository.ObtenerPorId(id.Value);
-
-            if (ordenTrabajo == null)
+            var resultado = _ordenTrabajoService.GetById(id.Value);
+            if (!resultado.Success)
             {
                 return HttpNotFound();
             }
 
-            return View(ordenTrabajo);
+            return View(resultado.Value);
         }
 
         public ActionResult ActualizarEstado(int? id)
@@ -48,12 +50,13 @@ namespace AutoFix.Controllers
                 return RedirectToAction("Index");
             }
 
-            var ordenTrabajo = ordenTrabajoRepository.ObtenerPorId(id.Value);
-
-            if (ordenTrabajo == null)
+            var resultado = _ordenTrabajoService.GetById(id.Value);
+            if (!resultado.Success)
             {
                 return HttpNotFound();
             }
+
+            var orden = resultado.Value;
 
             ViewBag.Estados = Enum.GetValues(typeof(EstadoOrden))
                 .Cast<EstadoOrden>()
@@ -61,65 +64,73 @@ namespace AutoFix.Controllers
                 {
                     Value = e.ToString(),
                     Text = ObtenerNombreEstado(e),
-                    Selected = ordenTrabajo.Estado == e.ToString()
+                    Selected = orden.Estado == e.ToString()
                 })
                 .ToList();
 
-            return View(ordenTrabajo);
+            return View(orden);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ActualizarEstado(int id, string estado, string observaciones)
         {
-            var ordenTrabajo = ordenTrabajoRepository.ObtenerPorId(id);
-
-            if (ordenTrabajo == null)
+            var actual = _ordenTrabajoService.GetById(id);
+            if (!actual.Success)
             {
                 return HttpNotFound();
             }
 
-            ordenTrabajo.Estado = estado;
-            ordenTrabajo.Observaciones = observaciones;
+            var orden = actual.Value;
 
-            if (estado == EstadoOrden.EnProceso.ToString() && ordenTrabajo.FechaInicio == null)
+            DateTime? fechaInicio = orden.FechaInicio;
+            if (estado == EstadoOrden.EnProceso.ToString() && fechaInicio == null)
             {
-                ordenTrabajo.FechaInicio = DateTime.Now;
+                fechaInicio = DateTime.Now;
             }
 
+            DateTime? fechaFinalizacion = orden.FechaFinalizacion;
             if (estado == EstadoOrden.Finalizada.ToString())
             {
-                ordenTrabajo.FechaFinalizacion = DateTime.Now;
+                fechaFinalizacion = DateTime.Now;
             }
 
-            ordenTrabajoRepository.Actualizar(ordenTrabajo);
-            ordenTrabajoRepository.Guardar();
+            var dto = new UpdateOrdenTrabajoDTO
+            {
+                Id = id,
+                Estado = estado,
+                Diagnostico = orden.Diagnostico,
+                Observaciones = observaciones,
+                FechaInicio = fechaInicio,
+                FechaFinalizacion = fechaFinalizacion
+            };
+
+            var resultado = _ordenTrabajoService.Update(dto);
+            if (!resultado.Success)
+            {
+                TempData["MensajeError"] = resultado.Error;
+                return RedirectToAction("Detalle", new { id });
+            }
 
             TempData["Success"] = "Estado y observaciones de la orden actualizados correctamente.";
 
-            return RedirectToAction("Detalle", new { id = ordenTrabajo.Id });
+            return RedirectToAction("Detalle", new { id });
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Eliminar(int id)
         {
-            var ordenTrabajo = ordenTrabajoRepository.ObtenerPorId(id);
-
-            if (ordenTrabajo == null)
+            var resultado = _ordenTrabajoService.Delete(id);
+            if (!resultado.Success)
             {
                 return HttpNotFound();
             }
-
-            ordenTrabajoRepository.EliminarLogico(id);
-            ordenTrabajoRepository.Guardar();
 
             TempData["Success"] = "Orden de trabajo eliminada correctamente.";
 
             return RedirectToAction("Index");
         }
-
 
         private string ObtenerNombreEstado(EstadoOrden estado)
         {
@@ -143,5 +154,3 @@ namespace AutoFix.Controllers
         }
     }
 }
-
-

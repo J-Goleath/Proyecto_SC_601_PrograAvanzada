@@ -1,9 +1,8 @@
-﻿using AutoFix.Domain.Interfaces.Repositories;
-using AutoFix.Domain.Entities;
+using AutoFix.Application.DTOs;
+using AutoFix.Application.Interfaces;
 using AutoFix.Filters;
-using AutoFix.infraestructure.DBContext;
-using AutoFix.infraestructure.Repositories;
 using System;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace AutoFix.Controllers
@@ -12,13 +11,11 @@ namespace AutoFix.Controllers
     [CustomAuthorize(Roles = "Cliente,Mecanico,Administrador")]
     public class NotificacionesController : Controller
     {
-        private readonly INotificacionRepository _notificacionRepository;
-        private readonly AutoFixContext _context;
+        private readonly INotificacionService _notificacionService;
 
-        public NotificacionesController()
+        public NotificacionesController(INotificacionService notificacionService)
         {
-            _context = new AutoFixContext();
-            _notificacionRepository = new NotificacionRepository(_context);
+            _notificacionService = notificacionService;
         }
 
         private int UsuarioId
@@ -29,19 +26,25 @@ namespace AutoFix.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var notificaciones = _notificacionRepository.GetByCliente(UsuarioId);
-            return View(notificaciones);
+            var resultado = _notificacionService.GetByCliente(UsuarioId);
+            if (!resultado.Success)
+            {
+                TempData["MensajeError"] = resultado.Error;
+                return View(Enumerable.Empty<NotificacionDTO>());
+            }
+            return View(resultado.Value);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult MarcarLeida(int id)
         {
-            var notificacion = _notificacionRepository.GetById(id);
-            if (notificacion != null && notificacion.ClienteId == UsuarioId && !notificacion.Borrado)
+            var resultado = _notificacionService.GetById(id);
+
+            // Solo se puede marcar como leída una notificación propia
+            if (resultado.Success && resultado.Value.ClienteId == UsuarioId)
             {
-                notificacion.Leida = true;
-                _notificacionRepository.Update(notificacion);
+                _notificacionService.MarcarComoLeida(id);
             }
 
             return RedirectToAction(nameof(Index));
@@ -51,26 +54,12 @@ namespace AutoFix.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MarcarTodasLeidas()
         {
-            var noLeidas = _notificacionRepository.GetNoLeidasByCliente(UsuarioId);
-            foreach (var notificacion in noLeidas)
+            var resultado = _notificacionService.MarcarTodasComoLeidas(UsuarioId);
+            if (resultado.Success)
             {
-                notificacion.Leida = true;
-                _notificacionRepository.Update(notificacion);
+                TempData["MensajeExito"] = "Todas las notificaciones fueron marcadas como leídas";
             }
-
-            TempData["MensajeExito"] = "Todas las notificaciones fueron marcadas como leÃ­das";
             return RedirectToAction(nameof(Index));
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }
-
-

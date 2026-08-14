@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AutoFix.Domain.Entities
 {
+    [Table("Repuestos")]
     public class Repuesto
     {
         [Key]

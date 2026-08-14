@@ -1,4 +1,4 @@
-﻿@model AutoFix.Entities.Cliente
+﻿@model AutoFix.Application.DTOs.UpdateClienteDTO
 
 @{
     ViewBag.Title = "Editar Cliente";
@@ -15,8 +15,7 @@
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(model => model.Id)
-                @Html.HiddenFor(model => model.FechaRegistro)
-                @Html.HiddenFor(model => model.Borrado)
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
                 <div class="row">
                     <div class="col-md-6">
@@ -48,7 +47,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             @Html.LabelFor(model => model.Contraseña, new { @class = "font-weight-bold" })
-                            <input type="password" name="Contraseña" id="Contraseña" class="form-control" placeholder="Dejar en blanco para no cambiar" />
+                            @Html.PasswordFor(model => model.Contraseña, new { @class = "form-control", placeholder = "Dejar en blanco para no cambiar" })
                             <small class="form-text text-muted">Solo complete este campo si desea cambiar la contraseña.</small>
                         </div>
                     </div>
@@ -62,17 +61,10 @@
                             @Html.ValidationMessageFor(model => model.Rol, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.FechaRegistro, new { @class = "font-weight-bold" })
-                            @Html.TextBoxFor(model => model.FechaRegistro, new { @class = "form-control", @readonly = "readonly" })
-                        </div>
-                    </div>
                 </div>
 
                 <div class="form-group mt-3">
-                    <button type="submit" class="btn btn-success" id="btnActualizar">
+                    <button type="submit" class="btn btn-success">
                         <i class="fas fa-save"></i> Actualizar
                     </button>
                     @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
@@ -84,23 +76,4 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-
-    <script>
-        $(document).ready(function () {
-            
-            if ($("#Contraseña").length > 0) {
-                $("#Contraseña").rules("remove", "required");
-            }
-
-            
-            $("#btnActualizar").on("click", function (e) {
-                
-                $(".field-validation-error").remove();
-                $(".input-validation-error").removeClass("input-validation-error");
-
-                
-                $(this).closest("form").submit();
-            });
-        });
-    </script>
 }

@@ -1,12 +1,9 @@
-﻿using AutoFix.Domain.Interfaces.Repositories;
-using AutoFix.Domain.Entities;
+using AutoFix.Application.DTOs;
+using AutoFix.Application.Interfaces;
+using AutoFix.Application.Validators;
 using AutoFix.Filters;
-using AutoFix.infraestructure.DBContext;
-using AutoFix.infraestructure.Repositories;
-using System;
-using System.Collections.Generic;
+using FluentValidation.Mvc;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace AutoFix.Controllers
@@ -15,139 +12,157 @@ namespace AutoFix.Controllers
     [CustomAuthorize(Roles = "Administrador")]
     public class VehiculosController : Controller
     {
-        private readonly IVehiculoRepository _vehiculoRepository;
-        private readonly IClienteRepository _clienteRepository;
-        private readonly AutoFixContext _context;
+        private readonly IVehiculoService _vehiculoService;
+        private readonly IClienteService _clienteService;
 
-        public VehiculosController()
+        public VehiculosController(IVehiculoService vehiculoService, IClienteService clienteService)
         {
-            _context = new AutoFixContext();
-            _vehiculoRepository = new VehiculoRepository(_context);
-            _clienteRepository = new ClienteRepository(_context);
+            _vehiculoService = vehiculoService;
+            _clienteService = clienteService;
+        }
+
+        private void CargarClientes(int? clienteSeleccionado = null)
+        {
+            var clientes = _clienteService.GetAll();
+            ViewBag.Clientes = new SelectList(clientes.Value, "Id", "Nombre", clienteSeleccionado);
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            var vehiculos = _vehiculoRepository.GetAll();
-            return View(vehiculos);
+            var resultado = _vehiculoService.GetAll();
+            if (!resultado.Success)
+            {
+                TempData["MensajeError"] = resultado.Error;
+                return View(Enumerable.Empty<VehiculoDTO>());
+            }
+            return View(resultado.Value);
         }
 
         [HttpGet]
         public ActionResult Create()
         {
-            ViewBag.Clientes = new SelectList(_clienteRepository.GetAll(), "Id", "Nombre");
-            return View(new Vehiculo());
+            CargarClientes();
+            return View(new CreateVehiculoDTO());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Vehiculo vehiculo)
+        public ActionResult Create(CreateVehiculoDTO dto)
         {
-            if (ModelState.IsValid)
+            var validacion = new CreateVehiculoDTOValidator().Validate(dto);
+            if (!validacion.IsValid)
             {
-                if (_vehiculoRepository.ExistePlaca(vehiculo.Placa))
-                {
-                    ModelState.AddModelError("Placa", "Ya existe un vehículo con esta placa");
-                    ViewBag.Clientes = new SelectList(_clienteRepository.GetAll(), "Id", "Nombre", vehiculo.ClienteId);
-                    return View(vehiculo);
-                }
-
-                vehiculo.FechaRegistro = DateTime.Now;
-                _vehiculoRepository.Add(vehiculo);
-                TempData["MensajeExito"] = "Vehículo registrado correctamente";
-                return RedirectToAction(nameof(Index));
+                validacion.AddToModelState(ModelState, null);
             }
 
-            ViewBag.Clientes = new SelectList(_clienteRepository.GetAll(), "Id", "Nombre", vehiculo.ClienteId);
-            return View(vehiculo);
+            if (ModelState.IsValid)
+            {
+                var resultado = _vehiculoService.Create(dto);
+                if (resultado.Success)
+                {
+                    TempData["MensajeExito"] = "Vehículo registrado correctamente";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                ModelState.AddModelError("", resultado.Error);
+            }
+
+            CargarClientes(dto.ClienteId);
+            return View(dto);
         }
 
-        
         [HttpGet]
         public ActionResult Details(int id)
         {
-            var vehiculo = _vehiculoRepository.GetById(id);
-            if (vehiculo == null || vehiculo.Borrado)
+            var resultado = _vehiculoService.GetById(id);
+            if (!resultado.Success)
             {
-                TempData["MensajeError"] = "El vehículo no existe";
+                TempData["MensajeError"] = resultado.Error;
                 return RedirectToAction(nameof(Index));
             }
-            return View(vehiculo);
+            return View(resultado.Value);
         }
 
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var vehiculo = _vehiculoRepository.GetById(id);
-            if (vehiculo == null || vehiculo.Borrado)
+            var resultado = _vehiculoService.GetById(id);
+            if (!resultado.Success)
             {
-                TempData["MensajeError"] = "El vehículo no existe";
+                TempData["MensajeError"] = resultado.Error;
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Clientes = new SelectList(_clienteRepository.GetAll(), "Id", "Nombre", vehiculo.ClienteId);
-            return View(vehiculo);
+
+            var vehiculo = resultado.Value;
+            var dto = new UpdateVehiculoDTO
+            {
+                Id = vehiculo.Id,
+                Placa = vehiculo.Placa,
+                Marca = vehiculo.Marca,
+                Modelo = vehiculo.Modelo,
+                Anio = vehiculo.Anio,
+                Color = vehiculo.Color,
+                ClienteId = vehiculo.ClienteId
+            };
+
+            CargarClientes(vehiculo.ClienteId);
+            return View(dto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Vehiculo vehiculo)
+        public ActionResult Edit(UpdateVehiculoDTO dto)
         {
+            var validacion = new UpdateVehiculoDTOValidator().Validate(dto);
+            if (!validacion.IsValid)
+            {
+                validacion.AddToModelState(ModelState, null);
+            }
+
             if (ModelState.IsValid)
             {
-                var vehiculoExistente = _vehiculoRepository.GetById(vehiculo.Id);
-                if (vehiculoExistente == null)
+                var resultado = _vehiculoService.Update(dto);
+                if (resultado.Success)
                 {
-                    TempData["MensajeError"] = "El vehículo no existe";
+                    TempData["MensajeExito"] = "Vehículo actualizado correctamente";
                     return RedirectToAction(nameof(Index));
                 }
 
-                var placaDuplicada = _vehiculoRepository.ExistePlaca(vehiculo.Placa);
-                if (placaDuplicada && vehiculoExistente.Placa != vehiculo.Placa)
-                {
-                    ModelState.AddModelError("Placa", "Ya existe otro vehículo con esta placa");
-                    ViewBag.Clientes = new SelectList(_clienteRepository.GetAll(), "Id", "Nombre", vehiculo.ClienteId);
-                    return View(vehiculo);
-                }
-
-                vehiculo.FechaRegistro = vehiculoExistente.FechaRegistro;
-                vehiculo.Borrado = vehiculoExistente.Borrado;
-
-                _vehiculoRepository.Update(vehiculo);
-                TempData["MensajeExito"] = "Vehículo actualizado correctamente";
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("", resultado.Error);
             }
 
-            ViewBag.Clientes = new SelectList(_clienteRepository.GetAll(), "Id", "Nombre", vehiculo.ClienteId);
-            return View(vehiculo);
+            CargarClientes(dto.ClienteId);
+            return View(dto);
+        }
+
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            var resultado = _vehiculoService.GetById(id);
+            if (!resultado.Success)
+            {
+                TempData["MensajeError"] = resultado.Error;
+                return RedirectToAction(nameof(Index));
+            }
+            return View(resultado.Value);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
+        [ActionName("Delete")]
+        public ActionResult DeleteConfirmed(int id)
         {
-            var vehiculo = _vehiculoRepository.GetById(id);
-            if (vehiculo != null && !vehiculo.Borrado)
+            var resultado = _vehiculoService.Delete(id);
+            if (resultado.Success)
             {
-                vehiculo.Borrado = true;
-                _vehiculoRepository.Update(vehiculo);
                 TempData["MensajeExito"] = "Vehículo eliminado correctamente";
-                return RedirectToAction(nameof(Index));
             }
-
-            TempData["MensajeError"] = "El vehículo no existe";
-            return RedirectToAction(nameof(Index));
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            else
             {
-                _context.Dispose();
+                TempData["MensajeError"] = resultado.Error;
             }
-            base.Dispose(disposing);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
-
-

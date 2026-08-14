@@ -1,22 +1,60 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\",
+  "WorkspaceRootPath": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|d:\\u\\sc-601 programacio\u0301n avanzada\\proyecto_sc_601_prograavanzada\\autofix\\infraestructure\\repositories\\iexpedientevehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:infraestructure\\repositories\\iexpedientevehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|c:\\users\\allis\\proyecto_sc_601_prograavanzada\\autofix\\migrations\\202608140709522_sincronizartableattributes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:migrations\\202608140709522_sincronizartableattributes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|d:\\u\\sc-601 programacio\u0301n avanzada\\proyecto_sc_601_prograavanzada\\autofix\\infraestructure\\repositories\\expedientevehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:infraestructure\\repositories\\expedientevehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|c:\\users\\allis\\proyecto_sc_601_prograavanzada\\autofix\\infraestructure\\repositories\\clienterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:infraestructure\\repositories\\clienterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|d:\\u\\sc-601 programacio\u0301n avanzada\\proyecto_sc_601_prograavanzada\\autofix\\infraestructure\\repositories\\vehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:infraestructure\\repositories\\vehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{AB504234-D7D7-4E78-B080-0EC1A1841E58}|..\\AutoFix.Domain\\AutoFix.Domain.csproj|c:\\users\\allis\\proyecto_sc_601_prograavanzada\\autofix.domain\\entities\\materialusado.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|d:\\u\\sc-601 programacio\u0301n avanzada\\proyecto_sc_601_prograavanzada\\autofix\\infraestructure\\repositories\\ivehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:infraestructure\\repositories\\ivehiculorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{AB504234-D7D7-4E78-B080-0EC1A1841E58}|..\\AutoFix.Domain\\AutoFix.Domain.csproj|c:\\users\\allis\\proyecto_sc_601_prograavanzada\\autofix.domain\\entities\\repuesto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B70E7F81-AC66-4092-B460-7BC3D2C27618}|..\\AutoFix.Application\\AutoFix.Application.csproj|c:\\users\\allis\\proyecto_sc_601_prograavanzada\\autofix.application\\services\\repuestoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|c:\\users\\allis\\proyecto_sc_601_prograavanzada\\autofix\\views\\calendariomecanico\\detalle.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:views\\calendariomecanico\\detalle.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B70E7F81-AC66-4092-B460-7BC3D2C27618}|..\\AutoFix.Application\\AutoFix.Application.csproj|c:\\users\\allis\\proyecto_sc_601_prograavanzada\\autofix.application\\dtos\\vehiculodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|c:\\users\\allis\\proyecto_sc_601_prograavanzada\\autofix\\controllers\\vehiculoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:controllers\\vehiculoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|c:\\users\\allis\\proyecto_sc_601_prograavanzada\\autofix\\views\\clientes\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:views\\clientes\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\global.asax.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:global.asax.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|c:\\users\\allis\\proyecto_sc_601_prograavanzada\\autofix\\controllers\\clientescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{103E6B55-BD1F-4416-82BC-6CD465485168}|AutoFix.csproj|solutionrelative:controllers\\clientescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B70E7F81-AC66-4092-B460-7BC3D2C27618}|..\\AutoFix.Application\\AutoFix.Application.csproj|c:\\users\\allis\\proyecto_sc_601_prograavanzada\\autofix.application\\mappings\\autofixmappings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AB504234-D7D7-4E78-B080-0EC1A1841E58}|..\\AutoFix.Domain\\AutoFix.Domain.csproj|c:\\users\\allis\\proyecto_sc_601_prograavanzada\\autofix.domain\\common\\passwordhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Entities\\Repuesto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Entities\\Repuesto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +64,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -45,55 +83,200 @@
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "IExpedienteVehiculoRepository.cs",
-              "DocumentMoniker": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\IExpedienteVehiculoRepository.cs",
-              "RelativeDocumentMoniker": "infraestructure\\Repositories\\IExpedienteVehiculoRepository.cs",
-              "ToolTip": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\IExpedienteVehiculoRepository.cs",
-              "RelativeToolTip": "infraestructure\\Repositories\\IExpedienteVehiculoRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-06T18:35:55.234Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ExpedienteVehiculoRepository.cs",
-              "DocumentMoniker": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\ExpedienteVehiculoRepository.cs",
-              "RelativeDocumentMoniker": "infraestructure\\Repositories\\ExpedienteVehiculoRepository.cs",
-              "ToolTip": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\ExpedienteVehiculoRepository.cs",
-              "RelativeToolTip": "infraestructure\\Repositories\\ExpedienteVehiculoRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "202608140709522_SincronizarTableAttributes.cs",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Migrations\\202608140709522_SincronizarTableAttributes.cs",
+              "RelativeDocumentMoniker": "Migrations\\202608140709522_SincronizarTableAttributes.cs",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Migrations\\202608140709522_SincronizarTableAttributes.cs",
+              "RelativeToolTip": "Migrations\\202608140709522_SincronizarTableAttributes.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-06T18:35:25.88Z",
+              "WhenOpened": "2026-08-14T07:09:57.975Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "VehiculoRepository.cs",
-              "DocumentMoniker": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\VehiculoRepository.cs",
-              "RelativeDocumentMoniker": "infraestructure\\Repositories\\VehiculoRepository.cs",
-              "ToolTip": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\VehiculoRepository.cs",
-              "RelativeToolTip": "infraestructure\\Repositories\\VehiculoRepository.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "Title": "MaterialUsado.cs",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix.Domain\\Entities\\MaterialUsado.cs",
+              "RelativeDocumentMoniker": "..\\AutoFix.Domain\\Entities\\MaterialUsado.cs",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix.Domain\\Entities\\MaterialUsado.cs",
+              "RelativeToolTip": "..\\AutoFix.Domain\\Entities\\MaterialUsado.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAUwC8AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-06T18:35:18.463Z",
+              "WhenOpened": "2026-08-14T07:05:18.243Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "IVehiculoRepository.cs",
-              "DocumentMoniker": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\IVehiculoRepository.cs",
-              "RelativeDocumentMoniker": "infraestructure\\Repositories\\IVehiculoRepository.cs",
-              "ToolTip": "D:\\U\\SC-601 Programacio\u0301n avanzada\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\IVehiculoRepository.cs",
-              "RelativeToolTip": "infraestructure\\Repositories\\IVehiculoRepository.cs",
+              "Title": "Repuesto.cs",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix.Domain\\Entities\\Repuesto.cs",
+              "RelativeDocumentMoniker": "..\\AutoFix.Domain\\Entities\\Repuesto.cs",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix.Domain\\Entities\\Repuesto.cs",
+              "RelativeToolTip": "..\\AutoFix.Domain\\Entities\\Repuesto.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAiwDgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-14T06:52:39.354Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RepuestoService.cs",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix.Application\\Services\\RepuestoService.cs",
+              "RelativeDocumentMoniker": "..\\AutoFix.Application\\Services\\RepuestoService.cs",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix.Application\\Services\\RepuestoService.cs",
+              "RelativeToolTip": "..\\AutoFix.Application\\Services\\RepuestoService.cs",
+              "ViewState": "AgIAAHEAAAAAAAAAAAAkwHsAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-14T06:48:42.359Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Detalle.cshtml",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Views\\CalendarioMecanico\\Detalle.cshtml",
+              "RelativeDocumentMoniker": "Views\\CalendarioMecanico\\Detalle.cshtml",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Views\\CalendarioMecanico\\Detalle.cshtml",
+              "RelativeToolTip": "Views\\CalendarioMecanico\\Detalle.cshtml",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAIwDoAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-14T06:33:03.945Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "VehiculoDTO.cs",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix.Application\\DTOs\\VehiculoDTO.cs",
+              "RelativeDocumentMoniker": "..\\AutoFix.Application\\DTOs\\VehiculoDTO.cs",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix.Application\\DTOs\\VehiculoDTO.cs",
+              "RelativeToolTip": "..\\AutoFix.Application\\DTOs\\VehiculoDTO.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwBEAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-14T05:36:57.192Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "VehiculosController.cs",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Controllers\\VehiculosController.cs",
+              "RelativeDocumentMoniker": "Controllers\\VehiculosController.cs",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Controllers\\VehiculosController.cs",
+              "RelativeToolTip": "Controllers\\VehiculosController.cs",
+              "ViewState": "AgIAAHoAAAAAAAAAAAAwwJkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-14T05:21:28.24Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Views\\Clientes\\Create.cshtml",
+              "RelativeDocumentMoniker": "Views\\Clientes\\Create.cshtml",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Views\\Clientes\\Create.cshtml",
+              "RelativeToolTip": "Views\\Clientes\\Create.cshtml",
+              "ViewState": "AgIAADsAAAAAAAAAAAAUwEMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-14T05:12:23.122Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ClientesController.cs",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Controllers\\ClientesController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ClientesController.cs",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Controllers\\ClientesController.cs",
+              "RelativeToolTip": "Controllers\\ClientesController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-14T04:52:15.419Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ClienteRepository.cs",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\ClienteRepository.cs",
+              "RelativeDocumentMoniker": "infraestructure\\Repositories\\ClienteRepository.cs",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\infraestructure\\Repositories\\ClienteRepository.cs",
+              "RelativeToolTip": "infraestructure\\Repositories\\ClienteRepository.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAuwBIAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-14T04:51:49.124Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AutoFixMappings.cs",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix.Application\\Mappings\\AutoFixMappings.cs",
+              "RelativeDocumentMoniker": "..\\AutoFix.Application\\Mappings\\AutoFixMappings.cs",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix.Application\\Mappings\\AutoFixMappings.cs",
+              "RelativeToolTip": "..\\AutoFix.Application\\Mappings\\AutoFixMappings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-14T04:49:56.021Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "PasswordHelper.cs",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix.Domain\\Common\\PasswordHelper.cs",
+              "RelativeDocumentMoniker": "..\\AutoFix.Domain\\Common\\PasswordHelper.cs",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix.Domain\\Common\\PasswordHelper.cs",
+              "RelativeToolTip": "..\\AutoFix.Domain\\Common\\PasswordHelper.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAswBgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-14T03:46:23.546Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "LoginController.cs",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Controllers\\LoginController.cs",
+              "RelativeDocumentMoniker": "Controllers\\LoginController.cs",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Controllers\\LoginController.cs",
+              "RelativeToolTip": "Controllers\\LoginController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-07T04:00:45.688Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Repuesto.cs",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Entities\\Repuesto.cs",
+              "RelativeDocumentMoniker": "Entities\\Repuesto.cs",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Entities\\Repuesto.cs",
+              "RelativeToolTip": "Entities\\Repuesto.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-07T04:57:14.653Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Global.asax.cs",
+              "DocumentMoniker": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Global.asax.cs",
+              "RelativeDocumentMoniker": "Global.asax.cs",
+              "ToolTip": "C:\\Users\\allis\\Proyecto_SC_601_PrograAvanzada\\AutoFix\\Global.asax.cs",
+              "RelativeToolTip": "Global.asax.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-06T18:35:16.883Z",
+              "WhenOpened": "2026-08-07T04:33:08.034Z",
               "EditorCaption": ""
             }
           ]
