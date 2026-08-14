@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web;
+
 namespace AutoFix.infraestructure.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
@@ -48,7 +48,6 @@ namespace AutoFix.infraestructure.Repositories
 
         public virtual void Update(T entity)
         {
-            
             var idProperty = typeof(T).GetProperty("Id");
             if (idProperty == null)
             {
@@ -69,5 +68,3 @@ namespace AutoFix.infraestructure.Repositories
         }
     }
 }
-
-

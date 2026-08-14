@@ -2,10 +2,9 @@
 using AutoFix.Domain.Entities;
 using AutoFix.infraestructure.DBContext;
 using AutoFix.Domain.Common;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+
 namespace AutoFix.infraestructure.Repositories
 {
     public class ClienteRepository : Repository<Cliente>, IClienteRepository
@@ -35,7 +34,6 @@ namespace AutoFix.infraestructure.Repositories
             if (cliente == null)
                 return null;
 
-            // Verificar contraseña encriptada
             if (PasswordHelper.Verificar(contraseña, cliente.Contraseña))
                 return cliente;
 
@@ -43,5 +41,3 @@ namespace AutoFix.infraestructure.Repositories
         }
     }
 }
-
-

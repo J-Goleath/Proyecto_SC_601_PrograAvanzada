@@ -4,6 +4,7 @@ using AutoFix.infraestructure.DBContext;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+
 namespace AutoFix.infraestructure.Repositories
 {
     public class ExpedienteVehiculoRepository : IExpedienteVehiculoRepository
@@ -27,5 +28,3 @@ namespace AutoFix.infraestructure.Repositories
         }
     }
 }
-
-

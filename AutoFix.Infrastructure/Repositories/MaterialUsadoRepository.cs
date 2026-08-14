@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+
 namespace AutoFix.infraestructure.Repositories
 {
     public class MaterialUsadoRepository : Repository<MaterialUsado>, IMaterialUsadoRepository
@@ -41,5 +42,3 @@ namespace AutoFix.infraestructure.Repositories
         }
     }
 }
-
-

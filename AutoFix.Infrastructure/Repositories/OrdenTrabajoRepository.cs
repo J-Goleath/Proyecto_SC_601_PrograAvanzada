@@ -1,4 +1,4 @@
-using AutoFix.Domain.Interfaces.Repositories;
+﻿using AutoFix.Domain.Interfaces.Repositories;
 using AutoFix.Domain.Entities;
 using AutoFix.infraestructure.DBContext;
 using System.Collections.Generic;
@@ -9,6 +9,7 @@ namespace AutoFix.infraestructure.Repositories
 {
     public class OrdenTrabajoRepository : IOrdenTrabajoRepository
     {
+
         private readonly AutoFixContext db;
 
         public OrdenTrabajoRepository(AutoFixContext context)

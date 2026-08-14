@@ -3,6 +3,7 @@ using AutoFix.Domain.Entities;
 using AutoFix.infraestructure.DBContext;
 using System.Collections.Generic;
 using System.Linq;
+
 namespace AutoFix.infraestructure.Repositories
 {
     public class NotificacionRepository : Repository<Notificacion>, INotificacionRepository
@@ -28,5 +29,3 @@ namespace AutoFix.infraestructure.Repositories
         }
     }
 }
-
-
