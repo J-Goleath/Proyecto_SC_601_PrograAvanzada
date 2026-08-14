@@ -1,0 +1,12 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Compilados
+bin/
+obj/
+
+# Otros
+*.dll
+*.pdb
