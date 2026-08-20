@@ -1,7 +1,7 @@
-﻿using AutoFix.Domain.Interfaces.Repositories;
+﻿using AutoFix.Application.DTOs;
+using AutoFix.Application.Interfaces;
+using AutoFix.Domain.Interfaces.Repositories;
 using AutoFix.Filters;
-using AutoFix.infraestructure.DBContext;
-using AutoFix.infraestructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +14,19 @@ namespace AutoFix.Controllers
     public class CalendarioMecanicoController : Controller
     {
         private readonly ICitaSolicitudRepository _citaRepository;
-        private readonly AutoFixContext _context;
-
+        private readonly IOrdenTrabajoRepository _ordenTrabajoRepository;
+        private readonly IOrdenTrabajoService _ordenTrabajoService;
 
         private static readonly int[] HorasVisibles = { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 };
 
-        public CalendarioMecanicoController()
+        public CalendarioMecanicoController(
+            ICitaSolicitudRepository citaRepository,
+            IOrdenTrabajoRepository ordenTrabajoRepository,
+            IOrdenTrabajoService ordenTrabajoService)
         {
-            _context = new AutoFixContext();
-            _citaRepository = new CitaSolicitudRepository(_context);
+            _citaRepository = citaRepository;
+            _ordenTrabajoRepository = ordenTrabajoRepository;
+            _ordenTrabajoService = ordenTrabajoService;
         }
 
         private int MecanicoId
@@ -84,12 +88,12 @@ namespace AutoFix.Controllers
             var cita = _citaRepository.GetById(id);
             if (cita == null || cita.Borrado || cita.MecanicoId != MecanicoId)
             {
-                TempData["MensajeError"] = "La cita no existe o no estÃ¡ asignada a usted";
+                TempData["MensajeError"] = "La cita no existe o no está asignada a usted";
                 return RedirectToAction(nameof(Index));
             }
 
-            var orden = _context.OrdenesTrabajo
-                .Where(o => o.CitaSolicitudId == id && !o.Borrado)
+            var orden = _ordenTrabajoRepository.ObtenerTodas()
+                .Where(o => o.CitaSolicitudId == id)
                 .OrderByDescending(o => o.FechaAsignacion)
                 .FirstOrDefault();
 
@@ -100,12 +104,51 @@ namespace AutoFix.Controllers
         }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CrearOrden(int citaId, string descripcionTrabajo, int prioridad)
+        {
+            var cita = _citaRepository.GetById(citaId);
+            if (cita == null || cita.Borrado || cita.MecanicoId != MecanicoId)
+            {
+                TempData["MensajeError"] = "La cita no existe o no está asignada a usted";
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (cita.Vehiculo == null)
+            {
+                TempData["MensajeError"] = "No se pudo determinar el cliente de esta cita";
+                return RedirectToAction(nameof(Detalle), new { id = citaId });
+            }
+
+            var dto = new CreateOrdenTrabajoDTO
+            {
+                CitaSolicitudId = cita.Id,
+                ClienteId = cita.Vehiculo.ClienteId,
+                MecanicoId = MecanicoId,
+                DescripcionTrabajo = descripcionTrabajo,
+                Prioridad = prioridad
+            };
+
+            var resultado = _ordenTrabajoService.Create(dto);
+            if (!resultado.Success)
+            {
+                TempData["MensajeError"] = resultado.Error;
+            }
+            else
+            {
+                TempData["MensajeExito"] = "Orden de trabajo creada correctamente.";
+            }
+
+            return RedirectToAction(nameof(Detalle), new { id = citaId });
+        }
+
         private Dictionary<int, string> ObtenerEstados(IEnumerable<int> citaIds)
         {
             var ids = citaIds.ToList();
 
-            var ordenesPorCita = _context.OrdenesTrabajo
-                .Where(o => ids.Contains(o.CitaSolicitudId) && !o.Borrado)
+            var ordenesPorCita = _ordenTrabajoRepository.ObtenerTodas()
+                .Where(o => ids.Contains(o.CitaSolicitudId))
                 .ToList()
                 .GroupBy(o => o.CitaSolicitudId)
                 .ToDictionary(g => g.Key, g => g.OrderByDescending(o => o.FechaAsignacion).First().Estado);
@@ -131,16 +174,5 @@ namespace AutoFix.Controllers
             int dow = fecha.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)fecha.DayOfWeek;
             return fecha.Date.AddDays(1 - dow); // retrocede hasta el lunes de esa semana
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }
-
-

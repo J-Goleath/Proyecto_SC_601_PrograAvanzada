@@ -1,4 +1,4 @@
-@model AutoFix.Domain.Entities.CitaSolicitud
+﻿@model AutoFix.Domain.Entities.CitaSolicitud
 @using System.Linq
 @{
     ViewBag.Title = "Detalle de la Cita";
@@ -15,6 +15,15 @@
             <h4 class="mb-0">Detalle de Orden de Trabajo</h4>
         </div>
         <div class="card-body">
+            @if (TempData["MensajeExito"] != null)
+            {
+                <div class="alert alert-success">@TempData["MensajeExito"]</div>
+            }
+            @if (TempData["MensajeError"] != null)
+            {
+                <div class="alert alert-danger">@TempData["MensajeError"]</div>
+            }
+
             <div class="row">
                 <div class="col-md-6">
                     <h5>Datos del Vehículo</h5>
@@ -72,12 +81,39 @@
                         {
                             <p class="text-muted">Aún no se han registrado materiales para esta orden.</p>
                         }
+
+                        <a href="@Url.Action("ActualizarEstado", "OrdenTrabajo", new { id = orden.Id })" class="btn btn-primary mt-3">
+                            Actualizar estado / observaciones
+                        </a>
                     }
                     else
                     {
                         <div class="alert alert-info">
                             Aún no se ha generado la orden de trabajo formal para esta cita.
                         </div>
+
+                        <h5>Crear orden de trabajo</h5>
+                        <form action="@Url.Action("CrearOrden", "CalendarioMecanico")" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="citaId" value="@Model.Id" />
+
+                            <div class="form-group">
+                                <label for="descripcionTrabajo">Descripción del trabajo a realizar</label>
+                                <textarea id="descripcionTrabajo" name="descripcionTrabajo" class="form-control" rows="3"
+                                          placeholder="Ej: Revisión y cambio de pastillas de freno delanteras" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prioridad">Prioridad</label>
+                                <select id="prioridad" name="prioridad" class="form-control">
+                                    <option value="1">Baja</option>
+                                    <option value="2" selected="selected">Media</option>
+                                    <option value="3">Alta</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">Crear orden de trabajo</button>
+                        </form>
                     }
                 </div>
             </div>
